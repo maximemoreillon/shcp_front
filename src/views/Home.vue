@@ -6,33 +6,29 @@
         class="floorplan"
         alt="floorplan"
         src="../assets/floorplan.svg"
-        v-on:click="floorplan_clicked"
-      />
+        v-on:click="floorplan_clicked"/>
 
 
       <component
         v-for="device in devices"
         v-bind:device="device"
-        v-bind:is="device.type"
-      />
+        v-bind:is="device.type"/>
 
 
       <NewDevice
         v-bind:device="new_device"
         v-bind:show="show_new_device"
         v-bind:modal_open="new_device_modal_open"
-        v-on:close_new_device_modal="close_new_device_modal"
-      />
+        v-on:close_new_device_modal="close_new_device_modal"/>
 
 
     </div>
 
-    <button type="button" v-on:click="$store.commit('toggle_edit_mode')">edit mode</button>
-
-    <!-- list of components -->
-    <div v-for="i, component_name in $options.components" v-if="component_name !== $options.name">
-      {{component_name}}
+    <div class="edit_button_wrapper">
+      <button type="button" v-on:click="$store.commit('toggle_edit_mode')">edit mode</button>
     </div>
+
+
 
 
   </div>
@@ -54,7 +50,7 @@ import NewDevice from '@/components/NewDevice.vue'
 
 export default {
   name: 'home',
-  data: function () {
+  data () {
     return {
       devices: [],
       new_device: {
@@ -78,7 +74,10 @@ export default {
     NewDevice,
   },
   methods: {
-    floorplan_clicked: function(event) {
+    banana(){
+      console.log("banana")
+    },
+    floorplan_clicked(event) {
       if(this.$store.state.edit_mode){
 
         // Positioning the new device
@@ -89,15 +88,15 @@ export default {
         this.new_device_modal_open = true;
       }
     },
-    close_new_device_modal: function(){
+    close_new_device_modal(){
       this.show_new_device = false;
       this.new_device_modal_open = false;
     },
-    delete_all_devices_in_front_end: function() {
+    delete_all_devices_in_front_end() {
       this.devices.splice(0,this.devices.length);
     },
 
-    add_or_update_some_devices_in_front_end: function(incoming_device_array){
+    add_or_update_some_devices_in_front_end(incoming_device_array){
       // Update a device in the vue component data or create it if it does not exist already
 
       for(var incoming_device_index=0; incoming_device_index < incoming_device_array.length; incoming_device_index ++){
@@ -136,23 +135,10 @@ export default {
         }
       }
     },
-
-
   },
   // Handle websocket events
   // MAKE IT CONNECT ON MOUNT!!
   sockets: {
-    connect: function () {
-      console.log('[WS] Connected')
-      this.$socket.client.emit('login', {username: "moreillon", password: "poketenashi"});
-    },
-    authenticated: function(){
-      console.log('[WS] Authenticated');
-      this.$socket.client.emit('get_all_devices_from_back_end', {});
-    },
-    disconnect: function () {
-      console.log('socket disconnected')
-    },
     add_or_update_some_in_front_end: function (device_array) {
       console.log("[WS] add_or_update_some_in_front_end");
       this.add_or_update_some_devices_in_front_end(device_array);
@@ -170,10 +156,11 @@ export default {
 
 
   mounted: function () {
-
+    console.log("Home mounted");
+    this.$socket.client.emit('get_all_devices_from_back_end', {});
   },
   beforeDestroy: function(){
-    console.log("Bye home!");
+    console.log("Home before destroyed");
   },
 
 }
@@ -181,13 +168,28 @@ export default {
 
 <style scoped>
 
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
 .floorplan_wrapper{
-  display: inline-block;
+  /* used to position components absolutely */
   position: relative;
+
+  /* used so that its size fits the content */
+  display: inline-block;
 }
 
 .floorplan{
-  height: 70vh;
+  height: 60vh;
+}
+
+.edit_button_wrapper{
+  margin: 25px;
 }
 
 

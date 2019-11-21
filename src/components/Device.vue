@@ -1,13 +1,12 @@
 <template>
-  <div
-    class="device_wrapper"
-  >
+  <div class="device_wrapper">
 
   <DeviceIcon
     v-bind:device="device"
     v-bind:icon_class="icon_class"
-    v-on:icon_clicked="icon_clicked"
-  ></DeviceIcon>
+    v-long-press="300"
+    v-on:icon_clicked="icon_clicked()"
+    v-on:long-press-start=""/>
 
     <!-- form to edit the device -->
     <!-- Currently placed inside a modal -->
@@ -18,9 +17,7 @@
       <table>
         <tr>
           <td>Type</td>
-          <td>
-            TYPE SELECTOR
-          </td>
+          <td>TYPE SELECTOR</td>
         </tr>
         <tr v-for="form_field in form_fields">
           <td>{{form_field.label}}</td>
@@ -28,8 +25,7 @@
             <!-- V-MODEL IS TWO WAY BINDING! -->
             <input
               type="text"
-              v-model="device_copy[form_field.key]"
-            >
+              v-model="device_copy[form_field.key]">
           </td>
         </tr>
       </table>
@@ -82,6 +78,11 @@ export default {
   },
 
   methods: {
+    longPressStart(){
+      console.log("start")
+      $store.commit('toggle_edit_mode')
+    },
+
     icon_clicked: function(){
       if(this.$store.state.edit_mode){
         // Make a copy of the device for editing

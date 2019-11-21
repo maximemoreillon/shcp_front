@@ -1,13 +1,37 @@
 <template>
   <div id="app">
-    <router-view/>
+
+    <AppTemplate applicationName="SHCP"/>
+
   </div>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  text-align: center;
+<script>
+
+import AppTemplate from '@/components/vue_application_template/AppTemplate.vue'
+
+export default {
+  name: 'App',
+  components: {
+    AppTemplate,
+  },
+  sockets: {
+    connect() {
+      console.log('[WS] Connected')
+    },
+    authenticated(){
+      console.log('[WS] Authenticated');
+    },
+    disconnect () {
+      console.log('[WS] disconnected')
+    },
+  },
+
+
+
+
 }
+</script>
+<style>
 
 </style>
