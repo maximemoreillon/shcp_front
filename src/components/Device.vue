@@ -78,8 +78,13 @@ export default {
     icon_clicked(){
       if(this.$store.state.edit_mode){
         // Make a copy of the device for editing
+        // THIS COULD BE ACHIEVED UISNG KEY MAYBE
         this.device_copy = JSON.parse(JSON.stringify(this.device));
         this.open_edit_modal();
+
+        // The router alternative
+        //this.$router.push({ name: 'device_details', query: { id: this.device._id } })
+
       }
       else this.$emit('icon_clicked');
     },

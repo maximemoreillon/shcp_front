@@ -1,17 +1,21 @@
 <template>
   <div class="home">
 
-    <div class="new_devices_area">
+    <span class="mdi mdi-plus new_devices_area_open_button" v-on:click="new_devices_menu_open = true"/>
+
+    <!-- Menu to add devices -->
+    <div class="new_device_area_wrapper" v-if="new_devices_menu_open">
+      <span class="mdi mdi-close" v-on:click="new_devices_menu_open = false"/>
       <NewDeviceIcon
         v-for="device_type in device_types"
         v-bind:device_type="device_type"/>
-
-
     </div>
+
 
     <drop
       class="floorplan_wrapper"
-      v-on:drop="drop">
+      v-on:drop="drop"
+      v-on:dragenter="dragenter">
 
       <img
         id="floorplan"
@@ -41,13 +45,12 @@
     </drop>
 
     <!-- Button to put the app in edit mode -->
+    <!--
     <span
       class="edit_button mdi mdi-pencil"
       v-on:click="$store.commit('toggle_edit_mode')"/>
+    -->
 
-    <div class="" >
-
-    </div>
 
 
   </div>
@@ -72,16 +75,19 @@ export default {
   data () {
     return {
 
+      new_devices_menu_open: false,
+
       // icons in the new device area
       device_types : [
         {label: "MQTT light", component: "Light", icon:"lightbulb"},
         {label: "IP camera", component: "Camera", icon:"cctv"},
-        {label: "MQTT sensor", component: "Sensor", icon:"bulb"},
+        {label: "MQTT sensor", component: "Sensor", icon:"gauge"},
         {label: "MQTT heater", component: "Heater", icon:"radiator"},
         {label: "MQTT air conditioner", component: "ac", icon:"air-conditioner"},
         {label: "MQTT fan", component: "Fan", icon:"fan"},
       ],
 
+      // Not needed anymore thanks to drag and drop
       new_device: {
         _id: "new",
         position: {
@@ -110,12 +116,16 @@ export default {
     floorplan_clicked(event) {
       if(this.$store.state.edit_mode){
 
+        /*
         // Positioning the new device
         this.new_device.position.x = 100.00*event.offsetX/event.target.offsetWidth;
         this.new_device.position.y = 100.00*event.offsetY/event.target.offsetHeight;
 
         this.show_new_device = true;
         this.new_device_modal_open = true;
+        */
+
+        this.$store.commit('toggle_edit_mode')
 
       }
     },
@@ -127,7 +137,7 @@ export default {
       alert('right')
     },
     dragenter(){
-      console.log("enter")
+      this.new_devices_menu_open = false;
     },
 
     drop(transfer_data, event) {
@@ -170,18 +180,7 @@ export default {
 
 
       }
-
-      // compute position
-
-
-
-
-      // two types: moving an existing device or creating a new one
-
-
     },
-
-
   },
 }
 </script>
@@ -189,21 +188,27 @@ export default {
 <style scoped>
 
 .home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
 }
 
 .floorplan_wrapper{
   /* used to position components absolutely */
   position: relative;
 
+  /* alignment*/
+  margin-top: 25px;
+  margin-bottom: 25px;
+  margin-left: auto;
+  margin-right: auto;
+
   /* used so that its size fits the content */
-  display: inline-block;
+  width: 50vmin;
+  /* height is set by content */
 }
 
 .floorplan{
-  height: 60vh;
+  width: 100%;
+  /* height not set so as to preserve aspect ratio */
 }
 
 .edit_button_wrapper{
@@ -244,14 +249,39 @@ export default {
   100% {transform: translate(-50%,-50%) rotate(360deg);}
 }
 
-.new_devices_area{
+.new_device_area_wrapper{
+
+
+  position: absolute;
+  top: 0;
+  height: 100%;
+
+
+
+  background: white;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 200%;
+
+
+
+}
+
+
+.new_device_area_wrapper > * {
+  padding: 15px;
+}
+
+
+.new_devices_area_open_button {
+  padding: 15px;
+  position: absolute;
+  top: 0;
   font-size: 200%;
 }
-
-.new_devices_area > * {
-  margin: 10px;
-}
-
 
 </style>

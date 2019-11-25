@@ -28,10 +28,7 @@ router.beforeEach((to, from, next) => {
   // Authentication
   axios.post('https://authentication.maximemoreillon.com/status')
   .then(response => {
-    if(response.data.logged_in) {
-      console.log("Authenticated")
-      next();
-    }
+    if(response.data.logged_in)next();
     else window.location.href = "https://authentication.maximemoreillon.com/";
   })
   .catch(error => console.log(error))

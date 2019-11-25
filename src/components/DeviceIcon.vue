@@ -1,7 +1,8 @@
 <template>
-  <div
 
-    class="device_icon_wrapper droptarget"
+  <!-- wrapping in a div for click events-->
+  <div
+    class="device_icon_wrapper"
     v-bind:style="{left: device.position.x + '%',top: device.position.y + '%'}"
     v-on:click="$emit('icon_clicked')"
     v-on:contextmenu.prevent="$emit('icon_right_clicked')">
@@ -11,32 +12,25 @@
     <!-- ID used to detect if dropped on itself -->
     <!-- dropped on itself = longpress on mobile -->
     <drag
-      ref="icon"
       class="device_icon mdi"
       v-bind:id="device._id"
       v-bind:transfer-data="transfer_data"
       v-on:dragend="dragend"
-      v-bind:class="icon_class"/>
+      v-bind:class="icon_class">
 
-    <!-- Badges for additional info -->
-    <!-- WHY WRAPPED IN A DIV? -->
-    <div
-      class="icon_badge warning_badge"
-      v-if="device_disconnected">
-
-      <span class="mdi mdi-wifi-off"/>
-    </div>
-
-    <!-- Badge to indicate edit mode -->
-    <transition name="fade">
+      <!-- Badges for additional info -->
       <div
-        class="icon_badge edit_badge"
-        v-if="this.$store.state.edit_mode">
+        class="icon_badge warning_badge mdi mdi-wifi-off"
+        v-if="device_disconnected"/>
 
-        <span class="mdi mdi-pencil"/>
+      <!-- Badge to indicate edit mode -->
+      <transition name="fade">
+        <div
+          class="icon_badge edit_badge mdi mdi-pencil"
+          v-if="this.$store.state.edit_mode"/>
+      </transition>
 
-      </div>
-    </transition>
+    </drag>
 
   </div>
 </template>
@@ -109,6 +103,8 @@ export default {
 }
 
 .device_icon {
+
+  position: relative;
 
   /* default color */
   color: #535353;
