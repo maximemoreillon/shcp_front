@@ -1,7 +1,7 @@
 export const togglable = {
 
   methods: {
-    toggle: function(){
+    toggle(){
       var message = {};
       message.command_topic = this.device.command_topic;
 
@@ -16,5 +16,7 @@ export const togglable = {
       console.log('[WS] toggle_device_state');
       this.$socket.client.emit('front_to_mqtt', message);
     }
-  }
+  },
+
+  
 };

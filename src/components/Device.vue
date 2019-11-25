@@ -1,24 +1,21 @@
 <template>
   <div class="device_wrapper">
 
-  <DeviceIcon
-    v-bind:device="device"
-    v-bind:icon_class="icon_class"
-    v-long-press="300"
-    v-on:icon_clicked="icon_clicked()"
-    v-on:long-press-start=""/>
+    <!-- binding ID necessary to find the element from drag events -->
+    <DeviceIcon
+      v-bind:id="device._id"
+      v-bind:device="device"
+      v-bind:icon_class="icon_class"
+      v-on:icon_clicked="icon_clicked()"
+      v-on:icon_right_clicked="icon_right_clicked()"/>
 
     <!-- form to edit the device -->
     <!-- Currently placed inside a modal -->
     <Modal
       v-bind:open="edit_modal_open"
-      v-on:close_modal="close_edit_modal"
-    >
+      v-on:close_modal="close_edit_modal()">
+
       <table>
-        <tr>
-          <td>Type</td>
-          <td>TYPE SELECTOR</td>
-        </tr>
         <tr v-for="form_field in form_fields">
           <td>{{form_field.label}}</td>
           <td>
@@ -63,14 +60,14 @@ export default {
     form_fields: {
       type: Array,
       // Array defaults must be returned from a factory function
-      default: function(){return []},
+      default(){ return [] },
     },
     icon_class: {
       type: [Array, String],
       default: "mdi-help"
     },
   },
-  data: function () {
+  data() {
     return {
       device_copy: {},
       edit_modal_open: false,
@@ -78,28 +75,24 @@ export default {
   },
 
   methods: {
-    longPressStart(){
-      console.log("start")
-      $store.commit('toggle_edit_mode')
-    },
-
-    icon_clicked: function(){
+    icon_clicked(){
       if(this.$store.state.edit_mode){
         // Make a copy of the device for editing
         this.device_copy = JSON.parse(JSON.stringify(this.device));
         this.open_edit_modal();
       }
-      else {
-        this.$emit('icon_clicked');
-      }
+      else this.$emit('icon_clicked');
     },
-    open_edit_modal: function(){
+    icon_right_clicked(){
+      this.$store.commit('toggle_edit_mode')
+    },
+    open_edit_modal(){
       this.edit_modal_open = true;
     },
-    close_edit_modal: function(){
+    close_edit_modal(){
       this.edit_modal_open = false;
     },
-    get_properties_for_db: function(){
+    get_properties_for_db(){
       // Filter out unwanted properties to send to th DB
 
       var properties = {};
@@ -117,14 +110,14 @@ export default {
       return properties;
     },
     // Connection with back end
-    edit_device_in_back_end: function() {
+    edit_device_in_back_end() {
       console.log("[WS] edit_one_device_in_back_end");
       var properties = this.get_properties_for_db(this.device_copy);
       //console.log(properties)
       this.$socket.client.emit('edit_one_device_in_back_end', properties);
       this.close_edit_modal;
     },
-    delete_device_in_back_end: function() {
+    delete_device_in_back_end() {
       console.log("[WS] delete_one_device_in_back_end");
       var properties = this.get_properties_for_db(this.device_copy);
       this.$socket.client.emit('delete_one_device_in_back_end', properties);
@@ -136,6 +129,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.device_wrapper{
 
+}
 
 </style>

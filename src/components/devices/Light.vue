@@ -3,8 +3,7 @@
     v-bind:device="device"
     v-bind:icon_class="icon_class"
     v-on:icon_clicked="toggle"
-    v-bind:form_fields="form_fields"
-  ></device>
+    v-bind:form_fields="form_fields"/>
 </template>
 
 <script>
@@ -19,7 +18,7 @@ export default {
     device_shared_attributes,
     togglable,
   ],
-  data: function () {
+  data() {
     return {
       form_fields: [
         {key: "command_topic", label:"Command topic"},
@@ -30,10 +29,12 @@ export default {
     }
   },
   methods: {
-    
+
   },
   computed: {
-    icon_class: function(){
+    // Would be nice to simplify this a bit
+    // Maybe put that in a mixin
+    icon_class(){
       var icon_class = ["mdi-lightbulb"];
       if(this.device.state && this.device.payload_on){
         if(this.device.state === this.device.payload_on){

@@ -8,8 +8,9 @@ import io from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended';
 import '@mdi/font/css/materialdesignicons.css';
 
-import LongPress from 'vue-directive-long-press'
-Vue.directive('long-press', LongPress)
+
+import VueDragDrop from 'vue-drag-drop';
+Vue.use(VueDragDrop);
 
 const socket = io('https://shcp.maximemoreillon.com');
 
@@ -21,6 +22,8 @@ Vue.use(VueSocketIOExt, socket);
 
 Vue.config.productionTip = false
 
+
+// TODO: REMOVE THIS
 router.beforeEach((to, from, next) => {
   // Authentication
   axios.post('https://authentication.maximemoreillon.com/status')
@@ -38,5 +41,6 @@ router.beforeEach((to, from, next) => {
 new Vue({
   router,
   store,
+  bus: new Vue(), // used for drag and drop
   render: h => h(App)
 }).$mount('#app')

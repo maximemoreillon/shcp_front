@@ -1,31 +1,40 @@
 <template>
   <div
-    class="device_icon_wrapper"
-    v-bind:style="{left: device.position.x + '%',top: device.position.y + '%'}"
-    v-on:click="icon_clicked"
-  >
-    <!-- The icon itself -->
-    <span
-      class="device_icon mdi"
-      v-bind:class="icon_class"
 
-    ></span>
+    class="device_icon_wrapper droptarget"
+    v-bind:style="{left: device.position.x + '%',top: device.position.y + '%'}"
+    v-on:click="$emit('icon_clicked')"
+    v-on:contextmenu.prevent="$emit('icon_right_clicked')">
+
+    <!-- The icon itself -->
+    <!-- drag applied here otherwise overrides click events -->
+    <!-- ID used to detect if dropped on itself -->
+    <!-- dropped on itself = longpress on mobile -->
+    <drag
+      ref="icon"
+      class="device_icon mdi"
+      v-bind:id="device._id"
+      v-bind:transfer-data="transfer_data"
+      v-on:dragend="dragend"
+      v-bind:class="icon_class"/>
 
     <!-- Badges for additional info -->
+    <!-- WHY WRAPPED IN A DIV? -->
     <div
       class="icon_badge warning_badge"
-      v-if="device_disconnected"
-    >
-      <span class="mdi mdi-wifi-off"></span>
+      v-if="device_disconnected">
+
+      <span class="mdi mdi-wifi-off"/>
     </div>
 
     <!-- Badge to indicate edit mode -->
     <transition name="fade">
       <div
         class="icon_badge edit_badge"
-        v-if="this.$store.state.edit_mode"
-      >
-        <span class="mdi mdi-pencil"></span>
+        v-if="this.$store.state.edit_mode">
+
+        <span class="mdi mdi-pencil"/>
+
       </div>
     </transition>
 
@@ -47,16 +56,29 @@ export default {
     },
   },
   methods: {
-    icon_clicked: function(){
-      this.$emit('icon_clicked');
+    // used to check if the component is dropped on itself
+    // This is used for mobile applications where contextmenu is overriden by drag and drop
+    dragend(data, event){
+
+
+      // check if dropped on itself
+      // NOT WORKING!
+
+
     }
   },
   computed: {
-    device_disconnected: function(){
+    device_disconnected(){
       if(this.device.state){
         if(this.device.state === "{'state':'disconnected'}") return true;
       }
       return false;
+    },
+    transfer_data(){
+      return {
+        action: "update",
+        data: this.device,
+      }
     }
   }
 }
@@ -65,7 +87,6 @@ export default {
 
 
 <style scoped>
-@import url("//cdn.materialdesignicons.com/3.5.95/css/materialdesignicons.min.css");
 
 .device_icon_wrapper{
 
