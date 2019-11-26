@@ -1,21 +1,37 @@
 <template>
   <div class="home">
 
-    <span class="mdi mdi-plus new_devices_area_open_button" v-on:click="new_devices_menu_open = true"/>
+    <!-- Button to open side menu -->
+    <span
+      class="mdi mdi-menu new_devices_area_open_button"
+      v-on:click="new_devices_menu_open = true"/>
 
     <!-- Menu to add devices -->
-    <div class="new_device_area_wrapper" v-if="new_devices_menu_open">
-      <span class="mdi mdi-close" v-on:click="new_devices_menu_open = false"/>
+    <div
+      class="new_device_area_wrapper"
+      v-bind:class="{open: new_devices_menu_open}">
+
+      <span
+      class="mdi mdi-close new_devices_area_close_button"
+      v-on:click="new_devices_menu_open = false"/>
+
       <NewDeviceIcon
         v-for="device_type in device_types"
         v-bind:device_type="device_type"/>
     </div>
 
+    <!--
+    <drop
+      class="new_device_area_wrapper_background"
+      v-bind:class="{visible: new_devices_menu_open}"
+      v-on:click="new_devices_menu_open = false"
+      v-on:dragenter="dragenter"/>
+    -->
+
 
     <drop
       class="floorplan_wrapper"
-      v-on:drop="drop"
-      v-on:dragenter="dragenter">
+      v-on:drop="drop">
 
       <img
         id="floorplan"
@@ -257,6 +273,7 @@ export default {
   height: 100%;
 
 
+  transition: transform 0.5s;
 
   background: white;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -267,10 +284,12 @@ export default {
   align-items: center;
   font-size: 200%;
 
-
-
 }
 
+.new_device_area_wrapper:not(.open) {
+  transform: translateX(-100%);
+
+}
 
 .new_device_area_wrapper > * {
   padding: 15px;
@@ -282,6 +301,24 @@ export default {
   position: absolute;
   top: 0;
   font-size: 200%;
+
+  cursor: pointer;
+  transition: color 0.25s;
+}
+
+.new_devices_area_close_button {
+  cursor: pointer;
+  transition: color 0.25s;
+}
+
+
+.new_devices_area_close_button {
+  cursor: pointer;
+  transition: color 0.25s;
+}
+
+.new_devices_area_open_button:hover, .new_devices_area_close_button:hover {
+  color: #c00000;
 }
 
 </style>
