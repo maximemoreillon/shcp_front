@@ -1,21 +1,21 @@
 <template>
 
   <!-- wrapping in a div for click events-->
-  <div
+  <drag
     class="device_icon_wrapper"
-    v-bind:style="{left: device.position.x + '%',top: device.position.y + '%'}"
-    v-on:click="$emit('icon_clicked')"
-    v-on:contextmenu.prevent="$emit('icon_right_clicked')">
+    v-bind:transfer-data="transfer_data"
+    v-bind:style="{left: device.position.x + '%',top: device.position.y + '%'}">
 
     <!-- The icon itself -->
+    <!-- Manages drag evvents -->
     <!-- drag applied here otherwise overrides click events -->
     <!-- ID used to detect if dropped on itself -->
     <!-- dropped on itself = longpress on mobile -->
-    <drag
+    <div
+      v-on:click="$emit('icon_clicked')"
+      v-on:contextmenu.prevent="$emit('icon_right_clicked')"
       class="device_icon mdi"
       v-bind:id="device._id"
-      v-bind:transfer-data="transfer_data"
-      v-on:dragend="dragend"
       v-bind:class="icon_class">
 
       <!-- Badges for additional info -->
@@ -30,9 +30,9 @@
           v-if="this.$store.state.edit_mode"/>
       </transition>
 
-    </drag>
+    </div>
 
-  </div>
+  </drag>
 </template>
 
 <script>
@@ -49,18 +49,7 @@ export default {
       default: "mdi-help"
     },
   },
-  methods: {
-    // used to check if the component is dropped on itself
-    // This is used for mobile applications where contextmenu is overriden by drag and drop
-    dragend(data, event){
-
-
-      // check if dropped on itself
-      // NOT WORKING!
-
-
-    }
-  },
+  methods: {},
   computed: {
     device_disconnected(){
       if(this.device.state){
@@ -84,6 +73,7 @@ export default {
 
 .device_icon_wrapper{
 
+
   /* ensure above rest */
   z-index: 5;
 
@@ -104,6 +94,10 @@ export default {
 
 .device_icon {
 
+
+  /* padding to facilitate dropping on itself */
+  padding: 2vmin;
+
   position: relative;
 
   /* default color */
@@ -116,8 +110,8 @@ export default {
 
 .icon_badge{
   position: absolute;
-  top: 20%;
-  left: 80%;
+  top: 3vmin;
+  right: 0.5vmin;
 
   transform: translate(-50%,-50%);
 

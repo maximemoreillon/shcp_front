@@ -38,6 +38,5 @@ router.beforeEach((to, from, next) => {
 new Vue({
   router,
   store,
-  bus: new Vue(), // used for drag and drop
   render: h => h(App)
 }).$mount('#app')

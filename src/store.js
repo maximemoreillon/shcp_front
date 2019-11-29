@@ -14,6 +14,12 @@ export default new Vuex.Store({
     toggle_edit_mode(state){
       state.edit_mode = !state.edit_mode;
     },
+    enable_edit_mode(state){
+      state.edit_mode = true;
+    },
+    disable_edit_mode(state){
+      state.edit_mode = false;
+    },
 
     // Devices management
     add_or_update_some_devices(state, devices_to_update){
@@ -30,6 +36,7 @@ export default new Vuex.Store({
         else state.devices.push(device_to_update);
       })
     },
+
     delete_some_devices(state, devices_to_delete){
       // devices_to_delete is an Array
       devices_to_delete.forEach(device_to_delete => {

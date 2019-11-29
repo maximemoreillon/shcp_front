@@ -3,38 +3,42 @@
 
     <!-- Button to open side menu -->
     <span
-      class="mdi mdi-menu new_devices_area_open_button"
-      v-on:click="new_devices_menu_open = true"/>
+      class="mdi mdi-pencil new_devices_area_open_button"
+      v-on:click="$store.commit('enable_edit_mode')"/>
 
     <!-- Menu to add devices -->
     <div
       class="new_device_area_wrapper"
-      v-bind:class="{open: new_devices_menu_open}">
+      v-bind:class="{open: $store.state.edit_mode}">
 
       <span
-      class="mdi mdi-close new_devices_area_close_button"
-      v-on:click="new_devices_menu_open = false"/>
+      class="mdi mdi-pencil-off new_devices_area_close_button"
+      v-on:click="$store.commit('disable_edit_mode')"/>
 
       <NewDeviceIcon
         v-for="device_type in device_types"
         v-bind:device_type="device_type"/>
     </div>
 
+    <!-- wrapping a div inside for click events -->
     <!--
     <drop
       class="new_device_area_wrapper_background"
       v-bind:class="{visible: new_devices_menu_open}"
-      v-on:click="new_devices_menu_open = false"
-      v-on:dragenter="dragenter"/>
+      v-on:dragenter="dragenter">
+      <div v-on:click="new_devices_menu_open = false" />
+    </drop>
     -->
 
 
     <drop
       class="floorplan_wrapper"
-      v-on:drop="drop">
+      v-on:drop="drop"
+      v-on:dragenter="dragenter">
 
       <img
         id="floorplan"
+        v-bind:style="floorplan_styleObject"
         class="floorplan droptarget"
         alt="floorplan"
         src="../assets/floorplan.svg"
@@ -47,13 +51,6 @@
         v-bind:key="device._id"
         v-bind:device="device"
         v-bind:is="device.type"/>
-
-
-      <NewDevice
-        v-bind:device="new_device"
-        v-bind:show="show_new_device"
-        v-bind:modal_open="new_device_modal_open"
-        v-on:close_new_device_modal="close_new_device_modal()"/>
 
       <!-- TODO: Restore -->
       <span class="devices_loader" v-if="false"/>
@@ -83,7 +80,6 @@ import Sensor from '@/components/devices/Sensor.vue'
 import Camera from '@/components/devices/Camera.vue'
 import Fan from '@/components/devices/Fan.vue'
 
-import NewDevice from '@/components/NewDevice.vue'
 import NewDeviceIcon from '@/components/NewDeviceIcon.vue'
 
 export default {
@@ -91,7 +87,6 @@ export default {
   data () {
     return {
 
-      new_devices_menu_open: false,
 
       // icons in the new device area
       device_types : [
@@ -103,18 +98,6 @@ export default {
         {label: "MQTT fan", component: "Fan", icon:"fan"},
       ],
 
-      // Not needed anymore thanks to drag and drop
-      new_device: {
-        _id: "new",
-        position: {
-          x : 0,
-          y : 0
-        }
-      },
-
-      show_new_device: false,
-      new_device_modal_open: false,
-
     }
   },
   components: {
@@ -125,35 +108,22 @@ export default {
     ac, // Why can't AC be all caps?
     Fan,
 
-    NewDevice,
     NewDeviceIcon,
+  },
+  mounted(){
   },
   methods: {
     floorplan_clicked(event) {
       if(this.$store.state.edit_mode){
-
-        /*
-        // Positioning the new device
-        this.new_device.position.x = 100.00*event.offsetX/event.target.offsetWidth;
-        this.new_device.position.y = 100.00*event.offsetY/event.target.offsetHeight;
-
-        this.show_new_device = true;
-        this.new_device_modal_open = true;
-        */
-
-        this.$store.commit('toggle_edit_mode')
-
+        this.$store.commit('disable_edit_mode')
       }
     },
-    close_new_device_modal(){
-      this.show_new_device = false;
-      this.new_device_modal_open = false;
-    },
+
     floorplan_right_clicked(){
-      alert('right')
+      this.$store.commit('enable_edit_mode')
     },
     dragenter(){
-      this.new_devices_menu_open = false;
+      //this.new_devices_menu_open = false;
     },
 
     drop(transfer_data, event) {
@@ -175,29 +145,43 @@ export default {
           });
         }
         else if(transfer_data.action === "update"){
-          // Update an existing device
+          // Update an existing device (i.e. move it)
 
-          console.log("[WS] edit_one_device_in_back_end");
-          let device = transfer_data.data;
-          device.position = position
-          this.$socket.client.emit('edit_one_device_in_back_end', device);
+          if(this.$store.state.edit_mode){
 
+            let device = transfer_data.data;
+            device.position = position
+            this.$socket.client.emit('edit_one_device_in_back_end', device);
 
+          }
         }
-
-
       }
       else if(event.target.id === transfer_data.data._id){
         // Device dropped on itself
         // this isequivalent to a long press on mobile
         console.log("dropped on itself")
 
-        this.$store.commit('toggle_edit_mode')
-
+        this.$store.commit('enable_edit_mode')
 
       }
     },
   },
+  computed: {
+    floorplan_styleObject(){
+      let app = document.getElementById("app");
+
+      if(app.offsetHeight > app.offsetWidth){
+        return {
+          width: 0.7*app.offsetWidth + "px"
+        }
+      }
+      else {
+        return {
+          height: 0.7*app.offsetHeight + "px"
+        }
+      }
+    }
+  }
 }
 </script>
 
@@ -205,9 +189,13 @@ export default {
 
 .home {
 
+  /* Using flex so that wrapper takes dimensions of content */
+  display: flex;
+  justify-content: center;
 }
 
 .floorplan_wrapper{
+
   /* used to position components absolutely */
   position: relative;
 
@@ -217,14 +205,11 @@ export default {
   margin-left: auto;
   margin-right: auto;
 
-  /* used so that its size fits the content */
-  width: 50vmin;
-  /* height is set by content */
 }
 
 .floorplan{
-  width: 100%;
-  /* height not set so as to preserve aspect ratio */
+  /* Dimensions set using Vue */
+
 }
 
 .edit_button_wrapper{
@@ -270,6 +255,10 @@ export default {
 
   position: absolute;
   top: 0;
+  left: 0;
+  z-index: 10;
+
+  /* lucky that it works ... */
   height: 100%;
 
 
@@ -300,6 +289,7 @@ export default {
   padding: 15px;
   position: absolute;
   top: 0;
+  left: 0;
   font-size: 200%;
 
   cursor: pointer;
@@ -321,4 +311,25 @@ export default {
   color: #c00000;
 }
 
+.new_device_area_wrapper_background{
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+.new_device_area_wrapper_background.visible {
+  opacity: 0.5;
+  visibility: visible;;
+}
+.new_device_area_wrapper_background > div {
+  width: 100%;
+  height: 100%;
+}
 </style>
