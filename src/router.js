@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import DeviceDetails from './views/DeviceDetails.vue'
 
 Vue.use(Router)
 
@@ -14,10 +13,5 @@ export default new Router({
       name: 'home',
       component: Home
     },
-    {
-      path: '/device_details',
-      name: 'device_details',
-      component: DeviceDetails,
-    }
   ]
 })

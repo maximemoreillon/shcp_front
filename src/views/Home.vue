@@ -11,10 +11,15 @@
       class="new_device_area_wrapper"
       v-bind:class="{open: $store.state.edit_mode}">
 
+      <!-- close button -->
       <span
       class="mdi mdi-pencil-off new_devices_area_close_button"
       v-on:click="$store.commit('disable_edit_mode')"/>
 
+      <!-- divider -->
+      <div class="divider"/>
+
+      <!-- Icons for new devices -->
       <NewDeviceIcon
         v-for="device_type in device_types"
         v-bind:device_type="device_type"/>
@@ -56,14 +61,6 @@
       <span class="devices_loader" v-if="false"/>
 
     </drop>
-
-    <!-- Button to put the app in edit mode -->
-    <!--
-    <span
-      class="edit_button mdi mdi-pencil"
-      v-on:click="$store.commit('toggle_edit_mode')"/>
-    -->
-
 
 
   </div>
@@ -159,8 +156,6 @@ export default {
       else if(event.target.id === transfer_data.data._id){
         // Device dropped on itself
         // this isequivalent to a long press on mobile
-        console.log("dropped on itself")
-
         this.$store.commit('enable_edit_mode')
 
       }
@@ -168,6 +163,7 @@ export default {
   },
   computed: {
     floorplan_styleObject(){
+      // DOESNT RESIZE AUTOMATICALLY
       let app = document.getElementById("app");
 
       if(app.offsetHeight > app.offsetWidth){
@@ -212,16 +208,6 @@ export default {
 
 }
 
-.edit_button_wrapper{
-  margin: 25px;
-}
-
-
-.edit_button {
-  font-size: 200%;
-  cursor: pointer;
-  color: #444444;
-}
 
 .devices_loader{
   z-index: 29;
@@ -252,6 +238,7 @@ export default {
 
 .new_device_area_wrapper{
 
+  color: #444444;
 
   position: absolute;
   top: 0;
@@ -280,12 +267,18 @@ export default {
 
 }
 
-.new_device_area_wrapper > * {
+.new_device_area_wrapper > *:not(.divider) {
   padding: 15px;
+}
+
+.new_device_area_wrapper .divider {
+  width: 75%;
+  border-bottom: 1px solid #dddddd;
 }
 
 
 .new_devices_area_open_button {
+  color: #444444;
   padding: 15px;
   position: absolute;
   top: 0;
