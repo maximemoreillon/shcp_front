@@ -16,15 +16,52 @@ export default {
     AppTemplate,
   },
   methods: {
-    
+
   },
   sockets: {
     connect() {
       console.log('[WS] Connected');
-      this.$socket.client.emit('get_all_devices_from_back_end', {});
+
+      // Check if possible to authentify using a JWT
+      if(this.$cookies.get('jwt')){
+        console.log("[Auth] JWT is present in cookies")
+
+        this.$socket.client.emit('token_authentication', {
+          jwt: this.$cookies.get('jwt')
+        })
+
+        // Acknowledge current authentication attempt
+        this.$store.commit('set_authenticating', true);
+
+        // Does not need to go to the login screen
+      }
+      else {
+        // if no JWT exists, then the client must authenticate using credentials
+        if(this.$route.path !== '/login') this.$router.push('/login')
+      }
+
     },
-    authenticated(){
+    unauthorized(data) {
+      console.log(data);
+      this.$router.push('/login');
+    },
+    authenticated(data){
       console.log('[WS] Authenticated');
+
+      // Save the JWT in cookies
+      if('jwt' in data) {
+        console.log("[Auth] Received a JWT, storing in cookies")
+        this.$cookies.set('jwt', data.jwt);
+      }
+
+      // mark as no longer trying to authenticate
+      this.$store.commit('set_authenticating', false);
+
+      // Get devices
+      this.$socket.client.emit('get_all_devices_from_back_end', {});
+
+      // Go back to home screen if not already here
+      if(this.$route.path !== '/') this.$router.push('/');
     },
     disconnect () {
       console.log('[WS] disconnected')

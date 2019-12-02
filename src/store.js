@@ -5,10 +5,31 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+
+    // user management
+    user: null,
+    authenticating: false,
+
+    // connection status
+    connected: false,
+
     edit_mode: false,
+
+    // devices management
+    devices_loading: false,
     devices: []
   },
   mutations: {
+
+    // Manage connection status
+    set_connected(state, new_state){
+      state.connected = new_state;
+    },
+
+    // Authentication
+    set_authenticating(state, new_state){
+      state.authenticating = new_state;
+    },
 
     // Edit mode
     toggle_edit_mode(state){

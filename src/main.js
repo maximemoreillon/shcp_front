@@ -6,6 +6,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import io from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended';
+import VueCookies from 'vue-cookies'
+
 import '@mdi/font/css/materialdesignicons.css';
 
 
@@ -19,6 +21,7 @@ axios.defaults.crossDomain = true
 
 Vue.use(VueAxios, axios)
 Vue.use(VueSocketIOExt, socket);
+Vue.use(VueCookies)
 
 Vue.config.productionTip = false
 
