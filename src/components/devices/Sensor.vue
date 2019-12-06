@@ -1,15 +1,16 @@
 <template>
+
   <device
     v-bind:device="device"
     v-bind:icon_class="icon_class"
-    v-on:icon_clicked="toggle"
-    v-bind:form_fields="form_fields"
-  >
+    v-on:icon_clicked="open_modal()"
+    v-bind:form_fields="form_fields">
+
     <!-- This device features a modal -->
     <Modal
       v-bind:open="modal_open"
-      v-on:close_modal="close_modal"
-    >
+      v-on:close_modal="close_modal">
+
       <div class="camera_image_wrapper">
         {{device.state}}
       </div>
@@ -31,13 +32,15 @@ export default {
   ],
   data: function () {
     return {
+
       icon_class: "mdi-gauge",
+
       form_fields: [
-        {key: "command_topic", label:"Command topic"},
         {key: "status_topic", label:"Status topic"},
-        {key: "payload_on", label:"Payload ON"},
-        {key: "payload_off", label:"Payload OFF"}
       ],
+      
+      modal_open: false,
+
     }
   }
 

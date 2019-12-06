@@ -4,7 +4,7 @@
     <!-- Button to open side menu -->
     <span
       class="mdi mdi-pencil new_devices_area_open_button"
-      v-on:click="$store.commit('enable_edit_mode')"/>
+      v-on:click="$store.commit('set_edit_mode', true)"/>
 
     <!-- Menu to add devices -->
     <div
@@ -14,7 +14,7 @@
       <!-- close button -->
       <span
       class="mdi mdi-pencil-off new_devices_area_close_button"
-      v-on:click="$store.commit('disable_edit_mode')"/>
+      v-on:click="$store.commit('set_edit_mode', false)"/>
 
       <!-- divider -->
       <div class="divider"/>
@@ -35,15 +35,14 @@
     </drop>
     -->
 
-
     <drop
       class="floorplan_wrapper"
       v-on:drop="drop"
       v-on:dragenter="dragenter">
 
+      <!-- is ID needed? -->
       <img
         id="floorplan"
-        v-bind:style="floorplan_styleObject"
         class="floorplan droptarget"
         alt="floorplan"
         src="../assets/floorplan.svg"
@@ -61,7 +60,6 @@
       <span class="devices_loader" v-if="false"/>
 
     </drop>
-
 
   </div>
 </template>
@@ -83,7 +81,6 @@ export default {
   name: 'home',
   data () {
     return {
-
 
       // icons in the new device area
       device_types : [
@@ -112,12 +109,12 @@ export default {
   methods: {
     floorplan_clicked(event) {
       if(this.$store.state.edit_mode){
-        this.$store.commit('disable_edit_mode')
+        this.$store.commit('set_edit_mode', false)
       }
     },
 
     floorplan_right_clicked(){
-      this.$store.commit('enable_edit_mode')
+      this.$store.commit('set_edit_mode', true)
     },
     dragenter(){
       //this.new_devices_menu_open = false;
@@ -156,27 +153,13 @@ export default {
       else if(event.target.id === transfer_data.data._id){
         // Device dropped on itself
         // this isequivalent to a long press on mobile
-        this.$store.commit('enable_edit_mode')
+        this.$store.commit('set_edit_mode', true)
 
       }
     },
   },
   computed: {
-    floorplan_styleObject(){
-      // DOESNT RESIZE AUTOMATICALLY
-      let app = document.getElementById("app");
 
-      if(app.offsetHeight > app.offsetWidth){
-        return {
-          width: 0.7*app.offsetWidth + "px"
-        }
-      }
-      else {
-        return {
-          height: 0.7*app.offsetHeight + "px"
-        }
-      }
-    }
   }
 }
 </script>
@@ -205,6 +188,7 @@ export default {
 
 .floorplan{
   /* Dimensions set using Vue */
+  width: 60vmin;
 
 }
 

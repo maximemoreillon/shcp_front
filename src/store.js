@@ -32,14 +32,8 @@ export default new Vuex.Store({
     },
 
     // Edit mode
-    toggle_edit_mode(state){
-      state.edit_mode = !state.edit_mode;
-    },
-    enable_edit_mode(state){
-      state.edit_mode = true;
-    },
-    disable_edit_mode(state){
-      state.edit_mode = false;
+    set_edit_mode(state,new_state){
+      state.edit_mode = new_state;
     },
 
     // Devices management

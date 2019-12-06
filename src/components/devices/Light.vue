@@ -2,7 +2,7 @@
   <device
     v-bind:device="device"
     v-bind:icon_class="icon_class"
-    v-on:icon_clicked="toggle"
+    v-on:icon_clicked="toggle()"
     v-bind:form_fields="form_fields"/>
 </template>
 

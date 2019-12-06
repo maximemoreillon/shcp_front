@@ -13,6 +13,7 @@
       <input type="password" v-model="credentials.password" placeholder="password">
       <input type="submit" value="login">
     </form>
+
     <form
       class="login_form"
       v-else
@@ -65,6 +66,7 @@ export default {
 </script>
 
 <style scoped>
+
 form {
   margin: 50px;
   display: flex;
@@ -118,3 +120,4 @@ input[type="submit"]:active{
   margin: 25px;
   font-size: 120%;
 }
+</style>

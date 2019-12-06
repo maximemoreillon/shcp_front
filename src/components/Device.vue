@@ -11,11 +11,12 @@
 
     <!-- form to edit the device -->
     <!-- Currently placed inside a modal -->
+    <!-- Could be a dedicated page -->
     <Modal
       v-bind:open="edit_modal_open"
       v-on:close_modal="close_edit_modal()">
 
-      <table>
+      <table class="device_properties_table">
         <tr v-for="form_field in form_fields">
           <td>{{form_field.label}}</td>
           <td>
@@ -27,16 +28,23 @@
         </tr>
       </table>
 
-      <!-- Buttons -->
+      <!-- save and delete buttons -->
       <div class="buttons_container">
-        <button v-on:click="edit_device_in_back_end">Update device</button>
-        <button v-on:click="delete_device_in_back_end">Delete device</button>
+
+        <span
+          class="mdi mdi-content-save"
+          v-on:click="edit_device_in_back_end()"/>
+
+        <span
+          class="mdi mdi-delete"
+          v-on:click="delete_device_in_back_end()"/>
+
       </div>
 
     </Modal>
 
-    <!-- device specific stuff goes here -->
-    <slot></slot>
+    <!-- Slot in case the device requiries it, for example for modals -->
+    <slot/>
 
   </div>
 </template>
@@ -120,13 +128,13 @@ export default {
       var properties = this.get_properties_for_db(this.device_copy);
       //console.log(properties)
       this.$socket.client.emit('edit_one_device_in_back_end', properties);
-      this.close_edit_modal;
+      this.close_edit_modal();
     },
     delete_device_in_back_end() {
       console.log("[WS] delete_one_device_in_back_end");
       var properties = this.get_properties_for_db(this.device_copy);
       this.$socket.client.emit('delete_one_device_in_back_end', properties);
-      this.close_edit_modal;
+      this.close_edit_modal();
     },
   }
 }
@@ -134,8 +142,52 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.device_wrapper{
+/* properties table */
 
+.device_properties_table{
+  margin: 15px;
+  width: 60vw;
+  border-collapse: collapse;
+}
+
+.device_properties_table td {
+  padding: 5px;
+}
+
+.device_properties_table tr:not(:last-child) {
+
+}
+
+.device_properties_table input[type="text"]{
+  border: none;
+  border-bottom: 1px solid #444444;
+  outline: none;
+  padding: 5px;
+  width: 100%;
+}
+
+.device_properties_table input[type="text"]:focus{
+  border-color: #c00000;
+}
+
+/* Buttons */
+.buttons_container{
+
+  display: flex;
+  justify-content: space-around;
+}
+
+.buttons_container > span {
+  padding: 10px;
+  font-size: 200%;
+  color: #444444;
+  transition: color 0.25s;
+  cursor: pointer;
+}
+
+
+.buttons_container > span:hover {
+  color: #c00000;
 }
 
 </style>
