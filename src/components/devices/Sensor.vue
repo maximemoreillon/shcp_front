@@ -4,15 +4,28 @@
     v-bind:device="device"
     v-bind:icon_class="icon_class"
     v-on:icon_clicked="open_modal()"
-    v-bind:form_fields="form_fields">
+    v-bind:form_fields="form_fields"
+    v-bind:icon_additional_content="icon_additional_content">
 
-    <!-- This device features a modal -->
+    <!-- This device features a modal used in the slot-->
     <Modal
       v-bind:open="modal_open"
-      v-on:close_modal="close_modal">
+      v-on:close_modal="close_modal()">
 
-      <div class="camera_image_wrapper">
-        {{device.state}}
+      <div class="sensor_modal_wrapper">
+
+        <div class="sensor_modal_title">
+          {{device.measurement_name}}
+        </div>
+        <div class="sensor_modal_content" v-if="this.device.json_key && this.device.state">
+
+          {{JSON.parse(device.state)[device.json_key]}}{{device.unit}}
+        </div>
+        <div class="sensor_modal_content" v-else>
+          {{device.state}}
+
+        </div>
+
       </div>
     </Modal>
 
@@ -33,14 +46,30 @@ export default {
   data: function () {
     return {
 
-      icon_class: "mdi-gauge",
-
       form_fields: [
+        {key: "measurement_name", label:"Measurement name"},
         {key: "status_topic", label:"Status topic"},
+        {key: "json_key", label:"JSON key"},
+        {key: "unit", label:"Unit"},
       ],
-      
+
       modal_open: false,
 
+    }
+  },
+  computed: {
+    icon_additional_content(){
+      if(this.device.json_key && this.device.state){
+        return JSON.parse(this.device.state)[this.device.json_key] + this.device.unit
+      }
+      else return ""
+
+    },
+    icon_class(){
+      if(this.device.json_key && this.device.state){
+        return ""
+      }
+      else return "mdi-gauge"
     }
   }
 
@@ -49,5 +78,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.sensor_modal_wrapper{
+  text-align: center;
+}
 
+.sensor_modal_wrapper > *{
+  margin: 25px;
+}
+.sensor_modal_title {
+  font-size: 150%;
+}
 </style>

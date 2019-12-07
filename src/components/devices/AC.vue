@@ -3,8 +3,7 @@
     v-bind:device="device"
     v-bind:icon_class="icon_class"
     v-on:icon_clicked="toggle"
-    v-bind:form_fields="form_fields"
-  ></device>
+    v-bind:form_fields="form_fields"/>
 </template>
 
 <script>
@@ -25,12 +24,8 @@ export default {
       required: true,
     },
   },
-  methods: {
-    toggle: function(){
-      console.log("hello")
-    }
-  },
-  data: function () {
+
+  data() {
     return {
       icon_class: "mdi-air-conditioner",
       form_fields: [

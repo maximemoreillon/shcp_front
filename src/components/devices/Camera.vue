@@ -7,17 +7,22 @@
   >
 
     <!-- This device features a modal -->
-    <modal
+    <Modal
       v-bind:open="modal_open"
-      v-on:close_modal="close_modal"
+      v-on:close_modal="close_modal()"
     >
       <div class="camera_image_wrapper">
+
         <img
+          v-if="camera_image_url"
           class="camera_image"
           v-bind:src="camera_image_url">
+
+        <span v-else class="mdi mdi-cctv"/>
+
       </div>
 
-    </modal>
+    </Modal>
 
   </device>
 </template>
@@ -40,7 +45,7 @@ export default {
       ],
       icon_class: "mdi-cctv",
       modal_open: false,
-      camera_image_url: "../../assets/logo.png",
+      camera_image_url: null,
     }
   },
   methods: {
@@ -49,6 +54,10 @@ export default {
       this.camera_image_url = "https://shcp.maximemoreillon.com/camera"
         +"?_id="+ this.device._id
         +"&jwt="+ this.$cookies.get('jwt');
+    },
+    close_modal(){
+      this.modal_open = false;
+      this.camera_image_url = null
     }
   },
 

@@ -7,7 +7,9 @@
       v-bind:device="device"
       v-bind:icon_class="icon_class"
       v-on:icon_clicked="icon_clicked()"
-      v-on:icon_right_clicked="icon_right_clicked()"/>
+      v-on:icon_right_clicked="icon_right_clicked()">
+      {{icon_additional_content}}
+    </DeviceIcon>
 
     <!-- form to edit the device -->
     <!-- Currently placed inside a modal -->
@@ -74,6 +76,9 @@ export default {
       type: [Array, String],
       default: "mdi-help"
     },
+    icon_additional_content: {
+      type: String
+    }
   },
   data() {
     return {

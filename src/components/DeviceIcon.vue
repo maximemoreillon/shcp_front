@@ -30,6 +30,10 @@
           v-if="this.$store.state.edit_mode"/>
       </transition>
 
+      <div class="additional_content">
+        <slot/>
+      </div>
+
     </div>
 
   </drag>
@@ -152,6 +156,10 @@ export default {
   opacity: 0;
 }
 
+/* for sensor values */
+.additional_content{
+  font-size: 50%;
+}
 
 
 
