@@ -25,16 +25,7 @@
         v-bind:device_type="device_type"/>
     </div>
 
-    <!-- wrapping a div inside for click events -->
-    <!--
-    <drop
-      class="new_device_area_wrapper_background"
-      v-bind:class="{visible: new_devices_menu_open}"
-      v-on:dragenter="dragenter">
-      <div v-on:click="new_devices_menu_open = false" />
-    </drop>
-    -->
-
+    <!-- the floorplan -->
     <drop
       class="floorplan_wrapper"
       v-on:drop="drop"
@@ -61,6 +52,10 @@
 
     </drop>
 
+
+    <!-- Diconnection warning modal -->
+    <DisconnectionWarning />
+
   </div>
 </template>
 
@@ -76,6 +71,7 @@ import Camera from '@/components/devices/Camera.vue'
 import Fan from '@/components/devices/Fan.vue'
 
 import NewDeviceIcon from '@/components/NewDeviceIcon.vue'
+import DisconnectionWarning from '@/components/DisconnectionWarning.vue'
 
 export default {
   name: 'home',
@@ -95,6 +91,7 @@ export default {
     }
   },
   components: {
+    // Devices
     Light,
     Camera,
     Sensor,
@@ -102,7 +99,9 @@ export default {
     ac, // Why can't AC be all caps?
     Fan,
 
+    // Additional stuff
     NewDeviceIcon,
+    DisconnectionWarning,
   },
   mounted(){
   },

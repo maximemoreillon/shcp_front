@@ -33,7 +33,11 @@ export default {
         // Acknowledge current authentication attempt
         this.$store.commit('set_authenticating', true);
 
+        // Acknowledge connection
+        this.$store.commit('set_connected', true);
+
         // Does not need to go to the login screen
+
       }
       else {
         // if no JWT exists, then the client must authenticate using credentials
@@ -64,7 +68,8 @@ export default {
       if(this.$route.path !== '/') this.$router.push('/');
     },
     disconnect () {
-      console.log('[WS] disconnected')
+      console.log('[WS] disconnected');
+      this.$store.commit('set_connected', false);
     },
     add_or_update_some_in_front_end(device_array) {
       console.log("[WS] add_or_update_some_in_front_end");
