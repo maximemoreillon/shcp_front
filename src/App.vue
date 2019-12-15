@@ -22,6 +22,9 @@ export default {
     connect() {
       console.log('[WS] Connected');
 
+      // Acknowledge connection
+      this.$store.commit('set_connected', true);
+      
       // Check if possible to authentify using a JWT
       if(this.$cookies.get('jwt')){
         console.log("[Auth] JWT is present in cookies")
@@ -33,14 +36,12 @@ export default {
         // Acknowledge current authentication attempt
         this.$store.commit('set_authenticating', true);
 
-        // Acknowledge connection
-        this.$store.commit('set_connected', true);
-
         // Does not need to go to the login screen
 
       }
       else {
         // if no JWT exists, then the client must authenticate using credentials
+        console.log("[Auth] JWT is NOT present in cookies")
         if(this.$route.path !== '/login') this.$router.push('/login')
       }
 
