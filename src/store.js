@@ -17,7 +17,7 @@ export default new Vuex.Store({
 
     // devices management
     devices_loading: false,
-    devices: []
+    devices: [],
   },
   mutations: {
 
@@ -42,13 +42,18 @@ export default new Vuex.Store({
       devices_to_update.forEach(device_to_update => {
 
         // Find Matching device
-        var device = state.devices.find(element => element._id === device_to_update._id);
+        var deviceIndex = state.devices.findIndex(element => element._id === device_to_update._id);
 
-        // Updat if found
-        if(device) Object.assign(device, device_to_update);
+        // Update if found
+        // THIS IS THE RIGHT WAY TO DEAL WITH REACTIVITY
+        if(deviceIndex !== -1) {
+          Vue.set(state.devices, deviceIndex, device_to_update)
+        }
 
         // create otherwise
-        else state.devices.push(device_to_update);
+        else {
+          state.devices.push(device_to_update);
+        }
       })
     },
 

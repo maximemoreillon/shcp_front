@@ -13,8 +13,8 @@
 
       <!-- close button -->
       <span
-      class="mdi mdi-pencil-off new_devices_area_close_button"
-      v-on:click="$store.commit('set_edit_mode', false)"/>
+        class="mdi mdi-pencil-off new_devices_area_close_button"
+        v-on:click="$store.commit('set_edit_mode', false)"/>
 
       <!-- divider -->
       <div class="divider"/>
@@ -23,6 +23,14 @@
       <NewDeviceIcon
         v-for="device_type in device_types"
         v-bind:device_type="device_type"/>
+
+      <!-- divider -->
+      <div class="divider"/>
+
+      <span
+        class="mdi mdi-image-edit-outline new_devices_area_close_button"
+        v-on:click="floorplan_upload_modal_open = true"/>
+
     </div>
 
     <!-- the floorplan -->
@@ -38,7 +46,7 @@
         alt="floorplan"
         src="../assets/floorplan.svg"
         v-on:click="floorplan_clicked($event)"
-        v-on:contextmenu.prevent="floorplan_right_clicked()"/>
+        v-on:contextmenu.prevent="$store.commit('set_edit_mode', true)"/>
 
       <!-- Devices are stored in Vuex -->
       <component
@@ -56,6 +64,17 @@
     <!-- Diconnection warning modal -->
     <DisconnectionWarning />
 
+    <Modal
+      v-bind:open="floorplan_upload_modal_open"
+      v-on:close_modal="floorplan_upload_modal_open = false">
+
+      <input type="file" ref="floorplan_upload">
+      <button type="button" v-on:click="floorplan_upload()">upload</button>
+
+
+
+    </Modal>
+
   </div>
 </template>
 
@@ -72,6 +91,7 @@ import Fan from '@/components/devices/Fan.vue'
 
 import NewDeviceIcon from '@/components/NewDeviceIcon.vue'
 import DisconnectionWarning from '@/components/DisconnectionWarning.vue'
+import Modal from '@/components/Modal.vue'
 
 export default {
   name: 'home',
@@ -79,6 +99,7 @@ export default {
     return {
 
       // icons in the new device area
+      // Are labels used?
       device_types : [
         {label: "MQTT light", component: "Light", icon:"lightbulb"},
         {label: "IP camera", component: "Camera", icon:"cctv"},
@@ -87,6 +108,8 @@ export default {
         {label: "MQTT air conditioner", component: "ac", icon:"air-conditioner"},
         {label: "MQTT fan", component: "Fan", icon:"fan"},
       ],
+
+      floorplan_upload_modal_open: false,
 
     }
   },
@@ -102,6 +125,7 @@ export default {
     // Additional stuff
     NewDeviceIcon,
     DisconnectionWarning,
+    Modal,
   },
   mounted(){
   },
@@ -112,9 +136,7 @@ export default {
       }
     },
 
-    floorplan_right_clicked(){
-      this.$store.commit('set_edit_mode', true)
-    },
+
     dragenter(){
       //this.new_devices_menu_open = false;
     },
@@ -156,6 +178,19 @@ export default {
 
       }
     },
+    floorplan_upload(){
+      // Get image from input
+      this.image = this.$refs.floorplan_upload.files[0];
+      if(this.image){
+        let formData = new FormData();
+        formData.append('image', this.image);
+        this.axios.post('https://shcp.maximemoreillon.com/floorplan_upload', formData, {
+          headers: {'Content-Type': 'multipart/form-data' }
+        })
+        .then(response => console.log(response.data))
+        .catch(error => console.log(error))
+      }
+    },
   },
   computed: {
 
@@ -170,6 +205,7 @@ export default {
   /* Using flex so that wrapper takes dimensions of content */
   display: flex;
   justify-content: center;
+  align-items: flex-start;
 }
 
 .floorplan_wrapper{

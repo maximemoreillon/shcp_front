@@ -17,14 +17,17 @@
         <div class="sensor_modal_title">
           {{device.measurement_name}}
         </div>
-        <div class="sensor_modal_content" v-if="this.device.json_key && this.device.state">
 
-          {{JSON.parse(device.state)[device.json_key]}}{{device.unit}}
+
+        <div class="sensor_modal_content" v-if="this.device.json_key && this.device.state">
+          {{JSON.parse(device.state.replace(/'/g,'"'))[device.json_key]}} {{device.unit}}
         </div>
+
+
         <div class="sensor_modal_content" v-else>
           {{device.state}}
-
         </div>
+
 
       </div>
     </Modal>
@@ -43,7 +46,7 @@ export default {
     device_shared_attributes,
     device_with_modal
   ],
-  data: function () {
+  data () {
     return {
 
       form_fields: [
@@ -60,14 +63,19 @@ export default {
   computed: {
     icon_additional_content(){
       if(this.device.json_key && this.device.state){
-        return JSON.parse(this.device.state)[this.device.json_key] + this.device.unit
+        if(JSON.parse(this.device.state.replace(/'/g,'"'))[this.device.json_key]){
+          return JSON.parse(this.device.state.replace(/'/g,'"'))[this.device.json_key] + this.device.unit
+        }
+        else return ""
+
       }
       else return ""
 
     },
     icon_class(){
       if(this.device.json_key && this.device.state){
-        return ""
+        if(JSON.parse(this.device.state.replace(/'/g,'"'))[this.device.json_key]) return ("")
+        else return "mdi-gauge"
       }
       else return "mdi-gauge"
     }
