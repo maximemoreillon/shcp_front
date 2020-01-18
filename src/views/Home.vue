@@ -44,7 +44,7 @@
         id="floorplan"
         class="floorplan droptarget"
         alt="floorplan"
-        src="../assets/floorplan.svg"
+        src="https://shcp.maximemoreillon.com/floorplan"
         v-on:click="floorplan_clicked($event)"
         v-on:contextmenu.prevent="$store.commit('set_edit_mode', true)"/>
 
