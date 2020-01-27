@@ -24,12 +24,12 @@ export default {
 
       // Acknowledge connection
       this.$store.commit('set_connected', true);
-      
+
       // Check if possible to authentify using a JWT
       if(this.$cookies.get('jwt')){
         console.log("[Auth] JWT is present in cookies")
 
-        this.$socket.client.emit('token_authentication', {
+        this.$socket.client.emit('authentication', {
           jwt: this.$cookies.get('jwt')
         })
 

@@ -51,7 +51,7 @@ export default {
   methods: {
     login(){
       console.log("logging in")
-      this.$socket.client.emit('credentials_authentication', {
+      this.$socket.client.emit('authentication', {
         credentials: {
           username: this.credentials.username,
           password: this.credentials.password,
