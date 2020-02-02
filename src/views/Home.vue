@@ -44,6 +44,7 @@
         id="floorplan"
         class="floorplan droptarget"
         alt="floorplan"
+        v-bind:style="floorplan_size"
         src="https://shcp.maximemoreillon.com/floorplan"
         v-on:click="floorplan_clicked($event)"
         v-on:contextmenu.prevent="$store.commit('set_edit_mode', true)"/>
@@ -111,6 +112,11 @@ export default {
 
       floorplan_upload_modal_open: false,
 
+      floorplan_size: {
+        width: undefined,
+        height: undefined,
+      }
+
     }
   },
   components: {
@@ -128,8 +134,28 @@ export default {
     Modal,
   },
   mounted(){
+    this.compute_floorplan_size()
+
+    window.onresize = () => {
+      this.compute_floorplan_size()
+    };
+
   },
   methods: {
+    compute_floorplan_size(){
+
+      if(window.innerWidth > window.innerHeight) {
+        // Landscape
+        this.floorplan_size.width = undefined;
+        this.floorplan_size.height = (0.6 * window.innerHeight) + "px";
+      }
+      else {
+        // Portrait
+        this.floorplan_size.width = (0.5 * window.innerWidth) + "px";
+        this.floorplan_size.height = undefined;
+      }
+    },
+
     floorplan_clicked(event) {
       if(this.$store.state.edit_mode){
         this.$store.commit('set_edit_mode', false)
@@ -222,8 +248,7 @@ export default {
 }
 
 .floorplan{
-  /* Dimensions set using Vue */
-  width: 60vmin;
+  //width: 50vmin;
 
 }
 
