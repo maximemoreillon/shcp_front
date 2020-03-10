@@ -42,6 +42,7 @@
       <!-- is ID needed? -->
       <img
         id="floorplan"
+        ref="floorplan"
         class="floorplan droptarget"
         alt="floorplan"
         v-bind:style="floorplan_size"
@@ -144,16 +145,26 @@ export default {
   methods: {
     compute_floorplan_size(){
 
-      if(window.innerWidth > window.innerHeight) {
-        // Landscape
-        this.floorplan_size.width = undefined;
-        this.floorplan_size.height = (0.6 * window.innerHeight) + "px";
+      // DIRTY
+
+      let original_floorplan_width = this.$refs.floorplan.naturalWidth
+      let original_floorplan_height = this.$refs.floorplan.naturalHeight
+
+      let available_vertical_space = window.innerHeight - 250
+      let available_horizontal_space = window.innerWidth - 2*65
+
+      let horizontal_scaling = available_horizontal_space/original_floorplan_width
+      let vertical_scaling = available_vertical_space/original_floorplan_height
+
+      if(vertical_scaling < horizontal_scaling){
+        this.floorplan_size.height = (original_floorplan_height * vertical_scaling) + "px"
+        this.floorplan_size.width = undefined
       }
       else {
-        // Portrait
-        this.floorplan_size.width = (0.5 * window.innerWidth) + "px";
-        this.floorplan_size.height = undefined;
+        this.floorplan_size.height = undefined
+        this.floorplan_size.width = (original_floorplan_width * horizontal_scaling) + "px"
       }
+
     },
 
     floorplan_clicked(event) {
