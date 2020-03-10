@@ -6,7 +6,7 @@
       class="mdi mdi-pencil new_devices_area_open_button"
       v-on:click="$store.commit('set_edit_mode', true)"/>
 
-    <!-- Menu to add devices -->
+    <!-- Side menu to add devices -->
     <div
       class="new_device_area_wrapper"
       v-bind:class="{open: $store.state.edit_mode}">
@@ -211,9 +211,12 @@ export default {
         let formData = new FormData();
         formData.append('image', this.image);
         this.axios.post('https://shcp.maximemoreillon.com/floorplan_upload', formData, {
-          headers: {'Content-Type': 'multipart/form-data' }
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': "Bearer " + this.$cookies.get('jwt')
+          }
         })
-        .then(response => console.log(response.data))
+        .then(response => this.$router.go())
         .catch(error => console.log(error))
       }
     },
@@ -231,7 +234,7 @@ export default {
   /* Using flex so that wrapper takes dimensions of content */
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .floorplan_wrapper{

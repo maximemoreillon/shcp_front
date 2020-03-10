@@ -14,10 +14,8 @@ import '@mdi/font/css/materialdesignicons.css';
 import VueDragDrop from 'vue-drag-drop';
 Vue.use(VueDragDrop);
 
-const socket = io('https://shcp.maximemoreillon.com');
+const socket = io(process.env.VUE_APP_SOCKETIO_SERVER_URL);
 
-axios.defaults.withCredentials = true
-axios.defaults.crossDomain = true
 
 Vue.use(VueAxios, axios)
 Vue.use(VueSocketIOExt, socket);
