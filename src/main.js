@@ -14,12 +14,16 @@ import '@mdi/font/css/materialdesignicons.css';
 import VueDragDrop from 'vue-drag-drop';
 Vue.use(VueDragDrop);
 
-const socket = io(process.env.VUE_APP_SOCKETIO_SERVER_URL);
+var socket = null
+if(process.env.VUE_APP_SOCKETIO_SERVER_URL) socket = io(process.env.VUE_APP_SOCKETIO_SERVER_URL)
+else socket = io()
 
 
 Vue.use(VueAxios, axios)
 Vue.use(VueSocketIOExt, socket);
 Vue.use(VueCookies)
+
+Vue.$cookies.config('30d')
 
 Vue.config.productionTip = false
 

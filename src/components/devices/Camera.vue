@@ -51,9 +51,11 @@ export default {
   methods: {
     open_modal(){
       this.modal_open = true;
-      this.camera_image_url = "https://shcp.maximemoreillon.com/camera"
-        +"?_id="+ this.device._id
-        +"&jwt="+ this.$cookies.get('jwt');
+
+      if(process.env.VUE_APP_SOCKETIO_SERVER_URL) this.camera_image_url = `${process.env.VUE_APP_SOCKETIO_SERVER_URL}/camera?_id=${this.device._id}&jwt=${this.$cookies.get('jwt')}`
+      else this.camera_image_url = `camera?_id${this.device._id}&jwt=${this.$cookies.get('jwt')}`
+
+
     },
     close_modal(){
       this.modal_open = false;

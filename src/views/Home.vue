@@ -141,6 +141,10 @@ export default {
       this.compute_floorplan_size()
     };
 
+    window.onload = () => {
+      this.compute_floorplan_size()
+    }
+
   },
   methods: {
     compute_floorplan_size(){
@@ -307,10 +311,10 @@ export default {
   height: 100%;
 
 
-  transition: transform 0.5s;
+  transition: transform 0.5s, box-shadow 0.5s;
 
   background: white;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
 
   display: flex;
   flex-direction: column;
@@ -318,6 +322,10 @@ export default {
   align-items: center;
   font-size: 200%;
 
+}
+
+.new_device_area_wrapper.open{
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .new_device_area_wrapper:not(.open) {
@@ -379,6 +387,7 @@ export default {
   opacity: 0.5;
   visibility: visible;;
 }
+
 .new_device_area_wrapper_background > div {
   width: 100%;
   height: 100%;
