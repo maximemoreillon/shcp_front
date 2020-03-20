@@ -10,29 +10,38 @@
     <!-- Manages drag evvents -->
     <!-- drag applied here otherwise overrides click events -->
     <!-- ID used to detect if dropped on itself -->
-    <!-- dropped on itself = longpress on mobile -->
+    <!-- dropped on itself = long press on mobile -->
     <div
       v-on:click="$emit('icon_clicked')"
       v-on:contextmenu.prevent="$emit('icon_right_clicked')"
-      class="device_icon mdi"
+      class="device_icon"
       v-bind:id="device._id"
-      v-bind:class="icon_class">
+      v-bind:class="{on: device_is_on, loading: device.loading}">
 
-      <!-- Badges for additional info -->
-      <div
-        class="icon_badge warning_badge mdi mdi-wifi-off"
-        v-if="device_disconnected"/>
+      <!-- the icon itself, again -->
+      <slot name="icon"/>
+      <help-icon v-if="!this.$slots.icon"/>
+
+      <!-- Badges for disconnection -->
+      <transition name="fade">
+        <wifi-off-icon
+          class="icon_badge warning_badge"
+          v-if="device_disconnected"/>
+      </transition>
 
       <!-- Badge to indicate edit mode -->
       <transition name="fade">
-        <div
-          class="icon_badge edit_badge mdi mdi-pencil"
+        <pencil-icon
+          class="icon_badge edit_badge"
           v-if="this.$store.state.edit_mode"/>
       </transition>
 
-      <div class="additional_content">
-        <slot/>
-      </div>
+      <!-- Badge to indicate edit mode -->
+      <transition name="fade">
+        <loading-icon
+          class="icon_badge loading_badge"
+          v-if="device.loading"/>
+      </transition>
 
     </div>
 
@@ -40,6 +49,12 @@
 </template>
 
 <script>
+
+import HelpIcon from 'vue-material-design-icons/Help.vue';
+import WifiOffIcon from 'vue-material-design-icons/WifiOff.vue';
+import PencilIcon from 'vue-material-design-icons/Pencil.vue';
+import LoadingIcon from 'vue-material-design-icons/Loading.vue';
+
 
 export default {
   name: 'DeviceIcon',
@@ -49,19 +64,42 @@ export default {
       required: true,
     },
     icon_class: {
-      type: [Array, String],
-      default: "mdi-help"
     },
+  },
+  components: {
+    HelpIcon,
+    PencilIcon,
+    WifiOffIcon,
+    LoadingIcon,
   },
   methods: {},
   computed: {
-    device_disconnected(){
-      if(this.device.state){
-        if(this.device.state === "{'state':'disconnected'}") return true;
+    device_is_on(){
+      if(this.device.state && this.device.payload_on){
+        if(this.device.state === this.device.payload_on){
+          return true;
+        }
       }
       return false;
     },
+
+    device_disconnected(){
+      /* this needs to be updated */
+
+      // Check if the device has a parsable state (IP cameras do not)
+      var state = null
+      try {
+        state = JSON.parse(this.device.state)
+        if(state.state === 'disconnected') return true
+        else return false
+      } catch (e) {
+        return false
+      }
+
+    },
+
     transfer_data(){
+      // Data transfered using drag drop
       return {
         action: "update",
         data: this.device,
@@ -107,16 +145,20 @@ export default {
   /* default color */
   color: #535353;
 
-  font-size: 6vmin;
+  font-size: 3vmin;
   transition: color 0.5s;
 
 }
+
+
+
 
 .icon_badge{
   position: absolute;
   top: 3vmin;
   right: 0.5vmin;
 
+  /* Position by center and not by corner */
   transform: translate(-50%,-50%);
 
   border: 0.3vmin solid white;
@@ -147,20 +189,27 @@ export default {
   color: #c00000;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.loading {
+  color: #aaaaaa;
+}
+
+.loading_badge {
+
+  background-color: #666666;
+
+
+  animation-name: rotation;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+
 }
 
 
-.fade-enter, .fade-leave-to{
-  opacity: 0;
+@keyframes rotation {
+  0% {transform: translate(-50%,-50%) rotate(0deg);}
+  100% {transform: translate(-50%,-50%) rotate(360deg);}
 }
-
-/* for sensor values */
-.additional_content{
-  font-size: 50%;
-}
-
-
 
 </style>

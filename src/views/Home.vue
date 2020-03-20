@@ -2,8 +2,8 @@
   <div class="home">
 
     <!-- Button to open side menu -->
-    <span
-      class="mdi mdi-pencil new_devices_area_open_button"
+    <pencil-icon
+      class="new_devices_area_open_button"
       v-on:click="$store.commit('set_edit_mode', true)"/>
 
     <!-- Side menu to add devices -->
@@ -12,23 +12,38 @@
       v-bind:class="{open: $store.state.edit_mode}">
 
       <!-- close button -->
-      <span
-        class="mdi mdi-pencil-off new_devices_area_close_button"
+      <pencil-off-icon
+        class="new_devices_area_close_button"
         v-on:click="$store.commit('set_edit_mode', false)"/>
 
       <!-- divider -->
       <div class="divider"/>
 
       <!-- Icons for new devices -->
-      <NewDeviceIcon
-        v-for="device_type in device_types"
-        v-bind:device_type="device_type"/>
+      <NewDeviceIcon component="Light">
+        <lightbulb-icon />
+      </NewDeviceIcon>
+      <NewDeviceIcon component="Fan">
+        <fan-icon />
+      </NewDeviceIcon>
+      <NewDeviceIcon component="ac">
+        <air-conditioner-icon />
+      </NewDeviceIcon>
+      <NewDeviceIcon component="Heater">
+        <radiator-icon />
+      </NewDeviceIcon>
+      <NewDeviceIcon component="Sensor">
+        <gauge-icon />
+      </NewDeviceIcon>
+      <NewDeviceIcon component="Camera">
+        <cctv-icon />
+      </NewDeviceIcon>
 
       <!-- divider -->
       <div class="divider"/>
 
-      <span
-        class="mdi mdi-image-edit-outline new_devices_area_close_button"
+      <image-edit-icon
+        class="new_devices_area_close_button"
         v-on:click="floorplan_upload_modal_open = true"/>
 
     </div>
@@ -46,6 +61,7 @@
         class="floorplan droptarget"
         alt="floorplan"
         v-bind:style="floorplan_size"
+        v-bind:class="{loading: $store.state.devices_loading}"
         src="https://shcp.maximemoreillon.com/floorplan"
         v-on:click="floorplan_clicked($event)"
         v-on:contextmenu.prevent="$store.commit('set_edit_mode', true)"/>
@@ -57,8 +73,12 @@
         v-bind:device="device"
         v-bind:is="device.type"/>
 
-      <!-- TODO: Restore -->
-      <span class="devices_loader" v-if="false"/>
+      <transition name="fade">
+        <span
+          class="devices_loader"
+          v-if="$store.state.devices_loading"/>
+      </transition>
+
 
     </drop>
 
@@ -72,8 +92,6 @@
 
       <input type="file" ref="floorplan_upload">
       <button type="button" v-on:click="floorplan_upload()">upload</button>
-
-
 
     </Modal>
 
@@ -95,22 +113,23 @@ import NewDeviceIcon from '@/components/NewDeviceIcon.vue'
 import DisconnectionWarning from '@/components/DisconnectionWarning.vue'
 import Modal from '@/components/Modal.vue'
 
+import PencilIcon from 'vue-material-design-icons/Pencil.vue';
+import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue';
+
+// Icons of the devices, NOT IDEAL
+import LightbulbIcon from 'vue-material-design-icons/Lightbulb.vue';
+import RadiatorIcon from 'vue-material-design-icons/Radiator.vue';
+import FanIcon from 'vue-material-design-icons/Fan.vue';
+import AirConditionerIcon from 'vue-material-design-icons/AirConditioner.vue';
+import GaugeIcon from 'vue-material-design-icons/Gauge.vue';
+import CctvIcon from 'vue-material-design-icons/Cctv.vue';
+import ImageEditIcon from 'vue-material-design-icons/ImageEdit.vue';
+
+
 export default {
   name: 'home',
   data () {
     return {
-
-      // icons in the new device area
-      // Are labels used?
-      device_types : [
-        {label: "MQTT light", component: "Light", icon:"lightbulb"},
-        {label: "IP camera", component: "Camera", icon:"cctv"},
-        {label: "MQTT sensor", component: "Sensor", icon:"gauge"},
-        {label: "MQTT heater", component: "Heater", icon:"radiator"},
-        {label: "MQTT air conditioner", component: "ac", icon:"air-conditioner"},
-        {label: "MQTT fan", component: "Fan", icon:"fan"},
-      ],
-
       floorplan_upload_modal_open: false,
 
       floorplan_size: {
@@ -133,6 +152,17 @@ export default {
     NewDeviceIcon,
     DisconnectionWarning,
     Modal,
+
+    // icons
+    PencilIcon,
+    PencilOffIcon,
+    LightbulbIcon,
+    RadiatorIcon,
+    FanIcon,
+    AirConditionerIcon,
+    GaugeIcon,
+    CctvIcon,
+    ImageEditIcon,
   },
   mounted(){
     this.compute_floorplan_size()
@@ -209,7 +239,10 @@ export default {
             device.position = position
             this.$socket.client.emit('edit_one_device_in_back_end', device);
 
+            // Mark device as loading
+            this.$set(device, 'loading', true)
           }
+
         }
       }
       else if(event.target.id === transfer_data.data._id){
@@ -236,9 +269,7 @@ export default {
       }
     },
   },
-  computed: {
 
-  }
 }
 </script>
 
@@ -267,7 +298,11 @@ export default {
 
 .floorplan{
   //width: 50vmin;
+  transition: opacity 0.25s;
+}
 
+.floorplan.loading{
+  opacity: 0.2;
 }
 
 
@@ -323,6 +358,10 @@ export default {
   font-size: 200%;
 
 }
+
+ .new_device_area_wrapper .material-design-icon {
+   cursor: pointer;
+ }
 
 .new_device_area_wrapper.open{
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -392,4 +431,6 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+
 </style>

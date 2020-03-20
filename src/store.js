@@ -36,6 +36,15 @@ export default new Vuex.Store({
       state.edit_mode = new_state;
     },
 
+    toggle_edit_mode(state){
+      state.edit_mode = !state.edit_mode ;
+    },
+
+    // Devices loading
+    set_devices_loading(state,new_state){
+      state.devices_loading = new_state;
+    },
+
     // Devices management
     add_or_update_some_devices(state, devices_to_update){
       // Update a device in the vue component data or create it if it does not exist already
@@ -45,15 +54,11 @@ export default new Vuex.Store({
         var deviceIndex = state.devices.findIndex(element => element._id === device_to_update._id);
 
         // Update if found
-        // THIS IS THE RIGHT WAY TO DEAL WITH REACTIVITY
-        if(deviceIndex !== -1) {
-          Vue.set(state.devices, deviceIndex, device_to_update)
-        }
+        // THIS IS THE RIGHT WAY TO DEAL WITH REACTIVITY?
+        if(deviceIndex !== -1) Vue.set(state.devices, deviceIndex, device_to_update)
 
         // create otherwise
-        else {
-          state.devices.push(device_to_update);
-        }
+        else state.devices.push(device_to_update);
       })
     },
 

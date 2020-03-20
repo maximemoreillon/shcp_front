@@ -1,10 +1,13 @@
 <template>
   <device
     v-bind:device="device"
-    v-bind:icon_class="icon_class"
     v-on:icon_clicked="open_modal()"
     v-bind:form_fields="form_fields"
   >
+
+    <template v-slot:icon>
+      <cctv-icon />
+    </template>
 
     <!-- This device features a modal -->
     <Modal
@@ -32,18 +35,23 @@
 import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
 import {device_with_modal} from '@/mixins/device_with_modal.js'
 
+import CctvIcon from 'vue-material-design-icons/Cctv.vue';
+
+
 export default {
   name: 'Camera',
   mixins: [
     device_with_modal,
     device_shared_attributes,
   ],
+  components: {
+    CctvIcon,
+  },
   data() {
     return {
       form_fields: [
         {key: "stream_url", label:"Stream URL"},
       ],
-      icon_class: "mdi-cctv",
       modal_open: false,
       camera_image_url: null,
     }

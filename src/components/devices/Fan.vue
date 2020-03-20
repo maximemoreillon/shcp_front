@@ -1,13 +1,22 @@
 <template>
   <device
     v-bind:device="device"
-    v-bind:icon_class="icon_class"
-  ></device>
+    v-on:icon_clicked="toggle()"
+    v-bind:form_fields="form_fields">
+
+    <template v-slot:icon>
+      <fan-icon />
+    </template>
+
+  </device>
 </template>
 <script>
 
 import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
 import {togglable} from '@/mixins/togglable.js'
+
+import FanIcon from 'vue-material-design-icons/Fan.vue';
+
 
 export default {
   name: 'Fan',
@@ -15,6 +24,9 @@ export default {
     device_shared_attributes,
     togglable,
   ],
+  components: {
+    FanIcon
+  },
   data: function () {
     return {
       form_fields: [
@@ -25,17 +37,7 @@ export default {
       ],
     }
   },
-  computed: {
-    icon_class: function(){
-      var icon_class = ["mdi-fan"];
-      if(this.device.state && this.device.payload_on){
-        if(this.device.state === this.device.payload_on){
-          icon_class.push("on");
-        }
-      }
-      return icon_class;
-    },
-  }
+
 
 }
 </script>

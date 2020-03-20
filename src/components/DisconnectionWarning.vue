@@ -7,7 +7,7 @@
 
 
 
-    <span class="mdi mdi-alert-outline warning_icon"/>
+    <alert-outline-icon class="warning_icon"/>
     <span class="warning_text">DISCONNECTED</span>
 
 
@@ -18,8 +18,13 @@
 </template>
 
 <script>
+import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue';
+
 export default {
   name: 'DisconnectionWarning',
+  components: {
+    AlertOutlineIcon
+  },
   data(){
     return {
       enabled: false,
@@ -76,8 +81,9 @@ export default {
   transition-delay: 0.25s;
 }
 
-.warning_icon {
-  font-size: 40vmin;
+.warning_icon > .material-design-icon__svg {
+  height: 40vmin;
+  width: 40vmin;
 }
 
 .warning_text {

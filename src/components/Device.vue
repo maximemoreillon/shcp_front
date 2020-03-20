@@ -2,14 +2,22 @@
   <div class="device_wrapper">
 
     <!-- binding ID necessary to find the element from drag events -->
+
+
+
     <DeviceIcon
       v-bind:id="device._id"
       v-bind:device="device"
-      v-bind:icon_class="icon_class"
       v-on:icon_clicked="icon_clicked()"
       v-on:icon_right_clicked="icon_right_clicked()">
-      {{icon_additional_content}}
+
+      <template v-slot:icon>
+        <slot name="icon" />
+      </template>
+
     </DeviceIcon>
+
+
 
     <!-- form to edit the device -->
     <!-- Currently placed inside a modal -->
@@ -25,7 +33,7 @@
             <!-- V-MODEL IS TWO WAY BINDING! -->
             <input
               type="text"
-              v-model="device_copy[form_field.key]">
+              v-model="device[form_field.key]">
           </td>
         </tr>
       </table>
@@ -33,19 +41,19 @@
       <!-- save and delete buttons -->
       <div class="buttons_container">
 
-        <span
-          class="mdi mdi-content-save"
+        <content-save-icon
+          class=""
           v-on:click="edit_device_in_back_end()"/>
 
-        <span
-          class="mdi mdi-delete"
+        <delete-icon
+          class=""
           v-on:click="delete_device_in_back_end()"/>
 
       </div>
 
     </Modal>
 
-    <!-- Slot in case the device requiries it, for example for modals -->
+    <!-- Slot in case the device requires it, for example for sensor modals -->
     <slot/>
 
   </div>
@@ -55,12 +63,18 @@
 import Modal from '@/components/Modal.vue'
 import DeviceIcon from '@/components/DeviceIcon.vue'
 
+import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue';
+import DeleteIcon from 'vue-material-design-icons/Delete.vue';
+
+
 export default {
   name: 'Device',
   mixins: [],
   components: {
     Modal,
-    DeviceIcon
+    DeviceIcon,
+    DeleteIcon,
+    ContentSaveIcon,
   },
   props: {
     device: {
@@ -69,37 +83,19 @@ export default {
     },
     form_fields: {
       type: Array,
-      // Array defaults must be returned from a factory function
       default(){ return [] },
     },
-    icon_class: {
-      type: [Array, String],
-      default: "mdi-help"
-    },
-    icon_additional_content: {
-      type: String
-    }
   },
   data() {
     return {
-      device_copy: {},
       edit_modal_open: false,
     }
   },
 
   methods: {
     icon_clicked(){
-      if(this.$store.state.edit_mode){
-        // Make a copy of the device for editing
-        // THIS COULD BE ACHIEVED UISNG KEY MAYBE
-        this.device_copy = JSON.parse(JSON.stringify(this.device));
-        this.open_edit_modal();
-
-        // The router alternative
-        //this.$router.push({ name: 'device_details', query: { id: this.device._id } })
-
-      }
-      else this.$emit('icon_clicked');
+      if(this.$store.state.edit_mode) this.open_edit_modal()
+      else this.$emit('icon_clicked')
     },
     icon_right_clicked(){
       this.$store.commit('toggle_edit_mode')
@@ -110,36 +106,27 @@ export default {
     close_edit_modal(){
       this.edit_modal_open = false;
     },
-    get_properties_for_db(){
-      // Filter out unwanted properties to send to th DB
 
-      var properties = {};
 
-      // Basic properties
-      properties._id = this.device_copy._id;
-      properties.type = this.device_copy.type;
-      properties.position = this.device_copy.position;
-
-      // Specific device properties, taken from fields
-      for(var field_index=0; field_index<this.form_fields.length; field_index++){
-        properties[this.form_fields[field_index].key] = this.device_copy[this.form_fields[field_index].key];
-      }
-
-      return properties;
-    },
     // Connection with back end
     edit_device_in_back_end() {
       console.log("[WS] edit_one_device_in_back_end");
-      var properties = this.get_properties_for_db(this.device_copy);
-      //console.log(properties)
-      this.$socket.client.emit('edit_one_device_in_back_end', properties);
+      this.$socket.client.emit('edit_one_device_in_back_end', this.device);
       this.close_edit_modal();
+
+      // Mark device as loading
+      this.$set(this.device, 'loading', true)
     },
     delete_device_in_back_end() {
-      console.log("[WS] delete_one_device_in_back_end");
-      var properties = this.get_properties_for_db(this.device_copy);
-      this.$socket.client.emit('delete_one_device_in_back_end', properties);
-      this.close_edit_modal();
+      if(confirm('Really?')){
+        console.log("[WS] delete_one_device_in_back_end");
+        this.$socket.client.emit('delete_one_device_in_back_end', this.device);
+        this.close_edit_modal();
+
+        // Mark device as loading
+        this.$set(this.device, 'loading', true)
+      }
+
     },
   }
 }

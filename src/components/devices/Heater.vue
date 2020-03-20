@@ -3,7 +3,13 @@
     v-bind:device="device"
     v-bind:icon_class="icon_class"
     v-on:icon_clicked="toggle"
-    v-bind:form_fields="form_fields"/>
+    v-bind:form_fields="form_fields">
+
+    <template v-slot:icon>
+      <radiator-icon />
+    </template>
+
+  </device>
 </template>
 
 <script>
@@ -11,12 +17,18 @@
 import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
 import {togglable} from '@/mixins/togglable.js'
 
+import RadiatorIcon from 'vue-material-design-icons/Radiator.vue';
+
+
 export default {
   name: 'Heater',
   mixins: [
     device_shared_attributes,
     togglable,
   ],
+  components: {
+    RadiatorIcon
+  },
   props: {
     device: {
       type: Object,
@@ -37,13 +49,12 @@ export default {
     // Would be nice to simplify this a bit
     // Maybe put that in a mixin
     icon_class(){
-      var icon_class = ["mdi-radiator"];
       if(this.device.state && this.device.payload_on){
         if(this.device.state === this.device.payload_on){
-          icon_class.push("on");
+          return "on"
         }
       }
-      return icon_class;
+      return "";
     }
   }
 

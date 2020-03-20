@@ -2,10 +2,14 @@
 
   <device
     v-bind:device="device"
-    v-bind:icon_class="icon_class"
     v-on:icon_clicked="open_modal()"
-    v-bind:form_fields="form_fields"
-    v-bind:icon_additional_content="icon_additional_content">
+    v-bind:form_fields="form_fields">
+
+    <template v-slot:icon>
+      <span v-if="icon_additional_content">{{icon_additional_content}}</span>
+      <gauge-icon v-else/>
+    </template>
+
 
     <!-- This device features a modal used in the slot-->
     <Modal
@@ -40,12 +44,18 @@
 import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
 import {device_with_modal} from '@/mixins/device_with_modal.js'
 
+import GaugeIcon from 'vue-material-design-icons/Gauge.vue';
+
+
 export default {
   name: 'Sensor',
   mixins: [
     device_shared_attributes,
     device_with_modal
   ],
+  components: {
+    GaugeIcon
+  },
   data () {
     return {
 
@@ -66,19 +76,11 @@ export default {
         if(JSON.parse(this.device.state.replace(/'/g,'"'))[this.device.json_key]){
           return JSON.parse(this.device.state.replace(/'/g,'"'))[this.device.json_key] + this.device.unit
         }
-        else return ""
-
       }
-      else return ""
+      return ""
 
     },
-    icon_class(){
-      if(this.device.json_key && this.device.state){
-        if(JSON.parse(this.device.state.replace(/'/g,'"'))[this.device.json_key]) return ("")
-        else return "mdi-gauge"
-      }
-      else return "mdi-gauge"
-    }
+
   }
 
 }

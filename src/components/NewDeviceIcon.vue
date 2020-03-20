@@ -1,8 +1,9 @@
 <template>
   <drag
-    class="mdi device_icon"
-    v-bind:class="'mdi-' + device_type.icon"
-    v-bind:transfer-data="transfer_data"/>
+    class="device_icon"
+    v-bind:transfer-data="transfer_data">
+    <slot/>
+  </drag>
 </template>
 
 <script>
@@ -10,7 +11,7 @@
 export default {
   name: 'NewDeviceIcon',
   props: {
-    device_type: Object,
+    component: String,
   },
   methods: {
 
@@ -19,7 +20,7 @@ export default {
     transfer_data(){
       return {
         action: "create",
-        data: this.device_type,
+        data: {component: this.component},
       }
     }
   },

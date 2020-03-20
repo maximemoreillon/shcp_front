@@ -1,9 +1,14 @@
 <template>
   <device
     v-bind:device="device"
-    v-bind:icon_class="icon_class"
     v-on:icon_clicked="toggle()"
-    v-bind:form_fields="form_fields"/>
+    v-bind:form_fields="form_fields">
+
+    <template v-slot:icon>
+      <lightbulb-icon />
+    </template>
+
+  </device>
 </template>
 
 <script>
@@ -12,12 +17,20 @@
 import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
 import {togglable} from '@/mixins/togglable.js'
 
+import LightbulbIcon from 'vue-material-design-icons/Lightbulb.vue';
+
+
 export default {
   name: 'Light',
   mixins: [
     device_shared_attributes,
     togglable,
+
+    //LightbulbIcon,
   ],
+  components: {
+    LightbulbIcon,
+  },
   data() {
     return {
       form_fields: [
@@ -28,22 +41,6 @@ export default {
       ],
     }
   },
-  methods: {
-
-  },
-  computed: {
-    // Would be nice to simplify this a bit
-    // Maybe put that in a mixin
-    icon_class(){
-      var icon_class = ["mdi-lightbulb"];
-      if(this.device.state && this.device.payload_on){
-        if(this.device.state === this.device.payload_on){
-          icon_class.push("on");
-        }
-      }
-      return icon_class;
-    }
-  }
 
 }
 </script>

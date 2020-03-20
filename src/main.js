@@ -8,8 +8,6 @@ import io from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended';
 import VueCookies from 'vue-cookies'
 
-import '@mdi/font/css/materialdesignicons.css';
-
 
 import VueDragDrop from 'vue-drag-drop';
 Vue.use(VueDragDrop);

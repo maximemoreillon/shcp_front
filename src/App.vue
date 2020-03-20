@@ -8,7 +8,7 @@
 
 <script>
 
-import AppTemplate from '@/components/vue_application_template/AppTemplate.vue'
+import AppTemplate from '@moreillon/vue_application_template'
 
 export default {
   name: 'App',
@@ -65,8 +65,10 @@ export default {
       // Get devices
       this.$socket.client.emit('get_all_devices_from_back_end', {});
 
+      this.$store.commit('set_devices_loading', true);
+
       // Go back to home screen if not already here
-      if(this.$route.path !== '/') this.$router.push('/');
+      //if(this.$route.path !== '/') this.$router.push('/');
     },
     disconnect () {
       console.log('[WS] disconnected');
@@ -80,6 +82,7 @@ export default {
       console.log("[WS] delete_and_create_all_in_front_end");
       this.$store.commit('delete_all_devices', device_array);
       this.$store.commit('add_or_update_some_devices', device_array);
+      this.$store.commit('set_devices_loading', false);
     },
     delete_some_in_front_end(device_array){
       console.log("[WS] delete_some_in_front_end");
@@ -93,5 +96,18 @@ export default {
 }
 </script>
 <style>
+.floorplan_wrapper .material-design-icon > .material-design-icon__svg {
+  height: 6vmin;
+  width: 6vmin;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+
+.fade-enter, .fade-leave-to{
+  opacity: 0;
+}
 
 </style>
