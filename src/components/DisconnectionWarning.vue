@@ -81,6 +81,14 @@ export default {
   transition-delay: 0.25s;
 }
 
+.disconnection_warning > * {
+  animation-name: blinking;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
 .warning_icon > .material-design-icon__svg {
   height: 40vmin;
   width: 40vmin;
@@ -88,6 +96,11 @@ export default {
 
 .warning_text {
   font-size: 5vmin;
+}
+
+@keyframes blinking {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
 }
 
 /*
