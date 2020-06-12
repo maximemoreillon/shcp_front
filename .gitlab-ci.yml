@@ -5,7 +5,7 @@ stages:
 variables:
   APPLICATION_NAME: shcp-front
   DOCKER_IMAGE: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
-  CERTIFICATE_DOMAIN: users.maximemoreillon.com
+  CERTIFICATE_DOMAIN: shcp.maximemoreillon.com
 
 containerization:
   stage: containerization
