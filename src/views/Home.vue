@@ -59,7 +59,7 @@
         alt="floorplan"
         v-bind:style="floorplan_size"
         v-bind:class="{loading: $store.state.devices_loading}"
-        src="https://shcp.maximemoreillon.com/floorplan"
+        v-bind:src="floorplan_src"
         v-on:click="floorplan_clicked($event)"
         v-on:contextmenu.prevent="$store.commit('set_edit_mode', true)"/>
 
@@ -127,6 +127,8 @@ export default {
   name: 'home',
   data () {
     return {
+
+      floorplan_src: `${process.env.VUE_APP_SHCP_API_URL}/floorplan`,
       floorplan_upload_modal_open: false,
 
       floorplan_size: {
