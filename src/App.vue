@@ -26,29 +26,27 @@ export default {
       this.$store.commit('set_connected', true);
 
       // Check if possible to authentify using a JWT
-      if(this.$cookies.get('jwt')){
-        console.log("[Auth] JWT is present in cookies")
-
-        this.$socket.client.emit('authentication', {
-          jwt: this.$cookies.get('jwt')
-        })
-
-        // Acknowledge current authentication attempt
-        this.$store.commit('set_authenticating', true);
-
-        // Does not need to go to the login screen
-
-      }
-      else {
-        // if no JWT exists, then the client must authenticate using credentials
+      let jwt = this.$cookies.get('jwt')
+      if(!jwt && this.$route.path !== '/login') {
         console.log("[Auth] JWT is NOT present in cookies")
-        if(this.$route.path !== '/login') this.$router.push('/login')
+        //return this.$router.push('/login')
+        return window.location.href = "https://authentication.maximemoreillon.com/";
       }
 
+      console.log("[Auth] JWT is present in cookies")
+      this.$socket.client.emit('authentication', {
+        jwt: jwt
+      })
+
+      // Acknowledge current authentication attempt
+      this.$store.commit('set_authenticating', true);
+
+      // Does not need to go to the login screen
     },
     unauthorized(data) {
       console.log(data);
-      this.$router.push('/login');
+      //this.$router.push('/login');
+      return window.location.href = "https://authentication.maximemoreillon.com/";
     },
     authenticated(data){
       console.log('[WS] Authenticated');

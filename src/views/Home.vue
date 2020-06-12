@@ -35,9 +35,6 @@
       <NewDeviceIcon component="Sensor">
         <gauge-icon />
       </NewDeviceIcon>
-      <NewDeviceIcon component="Camera">
-        <cctv-icon />
-      </NewDeviceIcon>
 
       <!-- divider -->
       <div class="divider"/>

@@ -17,6 +17,9 @@ if(process.env.VUE_APP_SOCKETIO_SERVER_URL) socket = io(process.env.VUE_APP_SOCK
 else socket = io()
 
 
+
+
+
 Vue.use(VueAxios, axios)
 Vue.use(VueSocketIOExt, socket);
 Vue.use(VueCookies)
@@ -24,6 +27,13 @@ Vue.use(VueCookies)
 Vue.$cookies.config('30d')
 
 Vue.config.productionTip = false
+
+/*
+router.beforeEach((to, from, next) => {
+  if(Vue.$cookies.get("jwt")) next();
+  else window.location.href = "https://authentication.maximemoreillon.com/";
+});
+*/
 
 
 new Vue({
