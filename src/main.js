@@ -27,12 +27,20 @@ Vue.$cookies.config('30d')
 
 Vue.config.productionTip = false
 
-/*
+
 router.beforeEach((to, from, next) => {
-  if(Vue.$cookies.get("jwt")) next();
-  else window.location.href = "https://authentication.maximemoreillon.com/";
+
+  if(Vue.$cookies.get("jwt")) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
+    next();
+  }
+  else {
+    delete axios.defaults.headers.common['Authorization']
+    window.location.href = process.env.VUE_APP_AUTHENTICATION_API_URL;
+  }
+
 });
-*/
+
 
 
 new Vue({
