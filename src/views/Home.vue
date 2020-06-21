@@ -87,6 +87,8 @@
       v-bind:open="floorplan_upload_modal_open"
       v-on:close_modal="floorplan_upload_modal_open = false">
 
+      <h2>Upload new floorplan</h2>
+
       <input type="file" ref="floorplan_upload">
       <button type="button" v-on:click="floorplan_upload()">upload</button>
 
@@ -275,11 +277,13 @@ export default {
 <style scoped>
 
 .home {
-
+  position: relative;
+  height: 100%;
   /* Using flex so that wrapper takes dimensions of content */
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 .floorplan_wrapper{
@@ -340,9 +344,6 @@ export default {
   top: 0;
   left: 0;
   z-index: 10;
-
-  /* lucky that it works ... */
-  height: 100%;
 
 
   transition: transform 0.5s, box-shadow 0.5s;

@@ -12,6 +12,7 @@ import VueCookies from 'vue-cookies'
 import VueDragDrop from 'vue-drag-drop';
 Vue.use(VueDragDrop);
 
+console.log(process.env.VUE_APP_SHCP_API_URL)
 const socket = io(process.env.VUE_APP_SHCP_API_URL)
 
 
@@ -36,7 +37,7 @@ router.beforeEach((to, from, next) => {
   }
   else {
     delete axios.defaults.headers.common['Authorization']
-    window.location.href = process.env.VUE_APP_AUTHENTICATION_API_URL;
+    window.location.href = process.env.VUE_APP_AUTHENTICATION_FRONT_URL;
   }
 
 });

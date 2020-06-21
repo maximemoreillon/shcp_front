@@ -1,7 +1,9 @@
 <template>
   <div id="app">
 
-    <AppTemplate applicationName="SHCP"/>
+    <AppTemplate applicationName="SHCP">
+      <router-view />
+    </AppTemplate>
 
   </div>
 </template>
@@ -30,7 +32,7 @@ export default {
       if(!jwt && this.$route.path !== '/login') {
         console.log("[Auth] JWT is NOT present in cookies")
         //return this.$router.push('/login')
-        return window.location.href = "https://authentication.maximemoreillon.com/";
+        return window.location.href = process.env.VUE_APP_AUTHENTICATION_FRONT_URL;
       }
 
       console.log("[Auth] JWT is present in cookies")
@@ -46,7 +48,7 @@ export default {
     unauthorized(data) {
       console.log(data);
       //this.$router.push('/login');
-      return window.location.href = "https://authentication.maximemoreillon.com/";
+      return window.location.href = process.env.VUE_APP_AUTHENTICATION_FRONT_URL;
     },
     authenticated(data){
       console.log('[WS] Authenticated');
