@@ -259,7 +259,7 @@ export default {
       if(this.image){
         let formData = new FormData();
         formData.append('image', this.image);
-        this.axios.post('https://shcp.maximemoreillon.com/floorplan_upload', formData, {
+        this.axios.post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': "Bearer " + this.$cookies.get('jwt')
