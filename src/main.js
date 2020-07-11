@@ -12,12 +12,7 @@ import VueCookies from 'vue-cookies'
 import VueDragDrop from 'vue-drag-drop';
 Vue.use(VueDragDrop);
 
-console.log(process.env.VUE_APP_SHCP_API_URL)
 const socket = io(process.env.VUE_APP_SHCP_API_URL)
-
-
-
-
 
 
 Vue.use(VueAxios, axios)
