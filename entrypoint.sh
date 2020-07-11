@@ -1,6 +1,9 @@
 #!/bin/sh
 
 ROOT_DIR=/app
+VUE_APP_SHCP_API_URLX=BANANA
+VUE_APP_AUTHENTICATION_API_URLX=BANANA
+VUE_APP_AUTHENTICATION_FRONT_URLX=BANANA
 
 # Replace env vars in files served by NGINX
 echo "Replacing environment variables"
@@ -8,9 +11,9 @@ for file in $ROOT_DIR/js/*.js* $ROOT_DIR/index.html $ROOT_DIR/precache-manifest*
 do
   echo "Processing $file ...";
 
-  #sed -i 's|VUE_APP_SHCP_API_URL|'${VUE_APP_SHCP_API_URL}'|g' $file
-  #sed -i 's|VUE_APP_AUTHENTICATION_API_URL|'${VUE_APP_AUTHENTICATION_API_URL}'|g' $file
-  #sed -i 's|VUE_APP_AUTHENTICATION_FRONT_URL|'${VUE_APP_AUTHENTICATION_FRONT_URL}'|g' $file
+  sed -i 's|VUE_APP_SHCP_API_URL|'${VUE_APP_SHCP_API_URLX}'|g' $file
+  sed -i 's|VUE_APP_AUTHENTICATION_API_URL|'${VUE_APP_AUTHENTICATION_API_URLX}'|g' $file
+  sed -i 's|VUE_APP_AUTHENTICATION_FRONT_URL|'${VUE_APP_AUTHENTICATION_FRONT_URLX}'|g' $file
 
 done
 
