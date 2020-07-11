@@ -2,9 +2,9 @@
 
 ROOT_DIR=/app
 
-VUE_APP_SHCP_API_URLX=BANANA
-VUE_APP_AUTHENTICATION_API_URLX=BANANA
-VUE_APP_AUTHENTICATION_FRONT_URLX=BANANA
+VUE_APP_SHCP_API_URLX=https://api.shcp.maximemoreillon.com
+VUE_APP_AUTHENTICATION_API_URLX=https://api.authentication.maximemoreillon.com
+VUE_APP_AUTHENTICATION_FRONT_URLX=https://authentication.maximemoreillon.com
 
 # Replace env vars in files served by NGINX
 echo "Replacing environment variables"
