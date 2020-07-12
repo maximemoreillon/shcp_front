@@ -32,7 +32,7 @@ export default {
       if(!jwt && this.$route.path !== '/login') {
         console.log("[Auth] JWT is NOT present in cookies")
         //return this.$router.push('/login')
-        return window.location.href = process.env.VUE_APP_AUTHENTICATION_FRONT_URL;
+        return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
       }
 
       console.log("[Auth] JWT is present in cookies")
@@ -48,7 +48,7 @@ export default {
     unauthorized(data) {
       console.log(data);
       //this.$router.push('/login');
-      return window.location.href = process.env.VUE_APP_AUTHENTICATION_FRONT_URL;
+      return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
     },
     authenticated(data){
       console.log('[WS] Authenticated');
