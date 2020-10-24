@@ -12,8 +12,6 @@ containerization:
   script:
     # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
-    # Environment variables
-    #- cp ${VUE_ENV} ./.env.production
     # Building the container image
     - docker build -t ${DOCKER_IMAGE} .
     # Pushing the image to the registry

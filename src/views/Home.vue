@@ -2,9 +2,13 @@
   <div class="home">
 
     <!-- Button to open side menu -->
-    <pencil-icon
-      class="new_devices_area_open_button"
-      v-on:click="$store.commit('set_edit_mode', true)"/>
+    <div
+      class="control_icon_wrapper new_devices_area_open_button_wrapper"
+      v-on:click="$store.commit('set_edit_mode', true)">
+      <pencil-icon
+        class="new_devices_area_open_button control_icon" />
+    </div>
+
 
     <!-- Side menu to add devices -->
     <div
@@ -12,9 +16,14 @@
       v-bind:class="{open: $store.state.edit_mode}">
 
       <!-- close button -->
-      <pencil-off-icon
-        class="new_devices_area_close_button"
-        v-on:click="$store.commit('set_edit_mode', false)"/>
+      <div
+        class="control_icon_wrapper"
+        v-on:click="$store.commit('set_edit_mode', false)">
+        <pencil-off-icon
+          class="new_devices_area_close_button control_icon"
+          />
+      </div>
+
 
       <!-- divider -->
       <div class="divider"/>
@@ -39,9 +48,13 @@
       <!-- divider -->
       <div class="divider"/>
 
-      <image-edit-icon
-        class="new_devices_area_close_button"
-        v-on:click="floorplan_upload_modal_open = true"/>
+      <div
+        v-on:click="floorplan_upload_modal_open = true"
+        class="control_icon_wrapper">
+        <image-edit-icon
+          class="new_devices_area_close_button control_icon" />
+      </div>
+
 
     </div>
 
@@ -277,6 +290,7 @@ export default {
 <style scoped>
 
 .home {
+  //margin-top: 1em;
   position: relative;
   height: 100%;
   /* Using flex so that wrapper takes dimensions of content */
@@ -359,6 +373,13 @@ export default {
 
 }
 
+.control_icon_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //padding: 15px;
+}
+
  .new_device_area_wrapper .material-design-icon {
    cursor: pointer;
  }
@@ -384,14 +405,17 @@ export default {
 
 .new_devices_area_open_button {
   color: #444444;
-  padding: 15px;
-  position: absolute;
-  top: 0;
-  left: 0;
   font-size: 200%;
 
   cursor: pointer;
   transition: color 0.25s;
+}
+
+.new_devices_area_open_button_wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 15px;
 }
 
 .new_devices_area_close_button {

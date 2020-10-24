@@ -24,23 +24,29 @@
 
       <!-- Badges for disconnection -->
       <transition name="fade">
-        <wifi-off-icon
-          class="icon_badge warning_badge"
-          v-if="device_disconnected"/>
+        <div
+           v-if="device_disconnected"
+           class="icon_badge warning_badge">
+          <wifi-off-icon/>
+        </div>
       </transition>
 
       <!-- Badge to indicate edit mode -->
       <transition name="fade">
-        <pencil-icon
-          class="icon_badge edit_badge"
-          v-if="this.$store.state.edit_mode"/>
+        <div
+           v-if="this.$store.state.edit_mode"
+          class="icon_badge edit_badge">
+          <pencil-icon/>
+        </div>
       </transition>
 
-      <!-- Badge to indicate edit mode -->
+      <!-- Badge to indicate loasing -->
       <transition name="fade">
-        <loading-icon
-          class="icon_badge loading_badge"
-          v-if="device.loading"/>
+        <div
+           v-if="device.loading"
+           class="icon_badge loading_badge">
+          <loading-icon/>
+        </div>
       </transition>
 
     </div>
@@ -111,10 +117,9 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
 
 .device_icon_wrapper{
-
 
   /* ensure above rest */
   z-index: 5;
@@ -128,14 +133,9 @@ export default {
   /* Misc visual */
   cursor: pointer;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
 }
 
 .device_icon {
-
 
   /* padding to facilitate dropping on itself */
   padding: 2vmin;
@@ -145,27 +145,24 @@ export default {
   /* default color */
   color: #535353;
 
-  font-size: 3vmin;
+  font-size: 5vmin;
   transition: color 0.5s;
-
 }
+
 
 
 
 
 .icon_badge{
   position: absolute;
-  top: 3vmin;
-  right: 0.5vmin;
-
-  /* Position by center and not by corner */
-  transform: translate(-50%,-50%);
+  top: 10%;
+  right: 10%;
 
   border: 0.3vmin solid white;
   border-radius: 50%;
 
-  width: 3vmin;
-  height: 3vmin;
+  width: 1.5em;
+  height: 1.5em;
 
   color: white;
 
@@ -176,6 +173,9 @@ export default {
   font-size: 2vmin;
 
 }
+
+
+
 
 .warning_badge {
   background-color: #c00000;
@@ -208,8 +208,8 @@ export default {
 
 
 @keyframes rotation {
-  0% {transform: translate(-50%,-50%) rotate(0deg);}
-  100% {transform: translate(-50%,-50%) rotate(360deg);}
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
 }
 
 </style>

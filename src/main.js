@@ -26,11 +26,11 @@ router.beforeEach((to, from, next) => {
 
   if(Vue.$cookies.get("jwt")) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
-    next();
+    next()
   }
   else {
     delete axios.defaults.headers.common['Authorization']
-    window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
+    //window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
   }
 
 });

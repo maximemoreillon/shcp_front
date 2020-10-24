@@ -9,9 +9,11 @@
       class="login_form"
       v-else-if="!$store.state.user"
       v-on:submit.prevent="login()">
+
       <input type="text" v-model="credentials.username" placeholder="username">
       <input type="password" v-model="credentials.password" placeholder="password">
       <input type="submit" value="login">
+      
     </form>
 
     <form

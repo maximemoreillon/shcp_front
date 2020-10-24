@@ -1,24 +1,22 @@
 <template>
   <div id="app">
 
-    <AppTemplate applicationName="SHCP">
-      <router-view />
-    </AppTemplate>
+    <AppTemplate
+      authenticate
+      applicationName="SHCP"/>
+
 
   </div>
 </template>
 
 <script>
 
-import AppTemplate from '@moreillon/vue_application_template'
+import AppTemplate from '@moreillon/vue_application_template_flex'
 
 export default {
   name: 'App',
   components: {
     AppTemplate,
-  },
-  methods: {
-
   },
   sockets: {
     connect() {
@@ -32,7 +30,7 @@ export default {
       if(!jwt && this.$route.path !== '/login') {
         console.log("[Auth] JWT is NOT present in cookies")
         //return this.$router.push('/login')
-        return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
+        //return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
       }
 
       console.log("[Auth] JWT is present in cookies")
@@ -48,7 +46,7 @@ export default {
     unauthorized(data) {
       console.log(data);
       //this.$router.push('/login');
-      return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
+      //return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
     },
     authenticated(data){
       console.log('[WS] Authenticated');
@@ -96,10 +94,14 @@ export default {
 }
 </script>
 <style>
-.floorplan_wrapper .material-design-icon > .material-design-icon__svg {
-  height: 6vmin;
-  width: 6vmin;
+.material-design-icon__svg {
+  bottom: 0 !important;
 }
+main {
+  /* override template */
+  margin: 0 !important;
+}
+
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;

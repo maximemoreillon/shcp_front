@@ -6,7 +6,9 @@
     v-bind:form_fields="form_fields">
 
     <template v-slot:icon>
-      <span v-if="icon_additional_content">{{icon_additional_content}}</span>
+      <span
+        class="sensor_reading"
+        v-if="icon_additional_content">{{icon_additional_content}}</span>
       <gauge-icon v-else/>
     </template>
 
@@ -97,5 +99,9 @@ export default {
 }
 .sensor_modal_title {
   font-size: 150%;
+}
+
+.sensor_reading {
+  font-size: 50%;
 }
 </style>
