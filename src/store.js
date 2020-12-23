@@ -54,7 +54,7 @@ export default new Vuex.Store({
         var deviceIndex = state.devices.findIndex(element => element._id === device_to_update._id);
 
         // Update if found
-        // THIS IS THE RIGHT WAY TO DEAL WITH REACTIVITY?
+        // Warning: Use Vue.set for reactivity
         if(deviceIndex !== -1) Vue.set(state.devices, deviceIndex, device_to_update)
 
         // create otherwise
@@ -62,16 +62,13 @@ export default new Vuex.Store({
       })
     },
 
-    delete_some_devices(state, devices_to_delete){
+    delete_device(state, device_to_delete){
       // devices_to_delete is an Array
-      devices_to_delete.forEach(device_to_delete => {
+      // Find the device
+      const device_index = state.devices.findIndex(element => element._id === device_to_delete._id)
 
-        // Find the device
-        var device_index = state.devices.findIndex(element => element._id === device_to_delete._id);
-
-        // if found, delete it
-        if(device_index !== -1) state.devices.splice(device_index,1);
-      })
+      // if found, delete it
+      if(device_index !== -1) state.devices.splice(device_index,1)
     },
     delete_all_devices(state) {
       state.devices.splice(0,state.devices.length);

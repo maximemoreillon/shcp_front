@@ -93,7 +93,7 @@
     </drop>
 
 
-    <!-- Diconnection warning modal -->
+    <!-- WS Diconnection warning modal -->
     <DisconnectionWarning />
 
     <Modal
@@ -237,12 +237,13 @@ export default {
         }
 
         if(transfer_data.action === "create"){
-          // Create a new device
-          this.$socket.client.emit('add_one_device_in_back_end', {
-            _id: "new",
+
+          const device_properties = {
             position: position,
             type: transfer_data.data.component
-          });
+          }
+          // Create a new device
+          this.$socket.client.emit('create_device', device_properties)
         }
         else if(transfer_data.action === "update"){
           // Update an existing device (i.e. move it)
@@ -251,7 +252,7 @@ export default {
 
             let device = transfer_data.data;
             device.position = position
-            this.$socket.client.emit('edit_one_device_in_back_end', device);
+            this.$socket.client.emit('update_device', device);
 
             // Mark device as loading
             this.$set(device, 'loading', true)
@@ -279,7 +280,10 @@ export default {
           }
         })
         .then(response => this.$router.go())
-        .catch(error => console.log(error))
+        .catch(error => {
+          alert(`Something went wrong while uploading the floorplan`)
+          console.log(error)
+        })
       }
     },
   },

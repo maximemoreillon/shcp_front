@@ -94,7 +94,7 @@ export default {
   text-align: center;
 }
 
-.sensor_modal_wrapper > *{
+.sensor_modal_wrapper > * {
   margin: 25px;
 }
 .sensor_modal_title {

@@ -23,7 +23,7 @@ export default {
     },
   },
   methods: {
-    close_modal : function () {
+    close_modal () {
       this.$emit('close_modal');
     }
   },
