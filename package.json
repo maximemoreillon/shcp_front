@@ -11,7 +11,7 @@
     "@moreillon/vue_application_template": "^1.0.0",
     "@moreillon/vue_application_template_flex": "^1.1.16",
     "@shopify/draggable": "^1.0.0-beta.8",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^2.6.11",
     "dotenv": "^8.2.0",
     "mobile-drag-drop": "^2.3.0-rc.2",
