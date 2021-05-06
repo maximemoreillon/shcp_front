@@ -26,14 +26,12 @@ export default {
       // Check if possible to authentify using a JWT
       let jwt = this.$cookies.get('jwt')
       if(!jwt && this.$route.path !== '/login') {
-        console.log("[Auth] JWT is NOT present in cookies")
         //return this.$router.push('/login')
         //return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
 
         return
       }
 
-      console.log("[Auth] JWT is present in cookies")
       this.$socket.client.emit('authentication', {jwt})
 
       // Acknowledge current authentication attempt
@@ -42,7 +40,6 @@ export default {
       // Does not need to go to the login screen
     },
     unauthorized(data) {
-      console.log(data)
       this.$store.commit('set_authenticating', false)
       //this.$router.push('/login');
       //return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
