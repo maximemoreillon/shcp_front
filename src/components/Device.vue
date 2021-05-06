@@ -110,7 +110,6 @@ export default {
 
     // Connection with back end
     edit_device_in_back_end() {
-      console.log("[WS] edit_one_device_in_back_end");
       this.$socket.client.emit('update_device', this.device);
       this.close_edit_modal();
 
@@ -119,7 +118,6 @@ export default {
     },
     delete_device_in_back_end() {
       if(confirm('Really?')){
-        console.log("[WS] delete_one_device_in_back_end");
         this.$socket.client.emit('delete_device', this.device);
         this.close_edit_modal();
 

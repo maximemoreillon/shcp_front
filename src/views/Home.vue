@@ -41,9 +41,13 @@
       <NewDeviceIcon component="Heater">
         <radiator-icon />
       </NewDeviceIcon>
+      <NewDeviceIcon component="Lock">
+        <lock-icon />
+      </NewDeviceIcon>
       <NewDeviceIcon component="Sensor">
         <gauge-icon />
       </NewDeviceIcon>
+
 
       <!-- divider -->
       <div class="divider"/>
@@ -115,6 +119,7 @@
 
 // Import devices types
 import Light from '@/components/devices/Light.vue'
+import Lock from '@/components/devices/Lock.vue'
 import ac from '@/components/devices/AC.vue'
 import Heater from '@/components/devices/Heater.vue'
 import Sensor from '@/components/devices/Sensor.vue'
@@ -126,16 +131,18 @@ import DisconnectionWarning from '@/components/DisconnectionWarning.vue'
 import Modal from '@/components/Modal.vue'
 
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
-import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue';
+import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue'
 
 // Icons of the devices, NOT IDEAL
-import LightbulbIcon from 'vue-material-design-icons/Lightbulb.vue';
-import RadiatorIcon from 'vue-material-design-icons/Radiator.vue';
-import FanIcon from 'vue-material-design-icons/Fan.vue';
-import AirConditionerIcon from 'vue-material-design-icons/AirConditioner.vue';
-import GaugeIcon from 'vue-material-design-icons/Gauge.vue';
-import CctvIcon from 'vue-material-design-icons/Cctv.vue';
-import ImageEditIcon from 'vue-material-design-icons/ImageEdit.vue';
+import LightbulbIcon from 'vue-material-design-icons/Lightbulb.vue'
+import RadiatorIcon from 'vue-material-design-icons/Radiator.vue'
+import FanIcon from 'vue-material-design-icons/Fan.vue'
+import AirConditionerIcon from 'vue-material-design-icons/AirConditioner.vue'
+import GaugeIcon from 'vue-material-design-icons/Gauge.vue'
+import CctvIcon from 'vue-material-design-icons/Cctv.vue'
+import ImageEditIcon from 'vue-material-design-icons/ImageEdit.vue'
+import LockIcon from 'vue-material-design-icons/Lock.vue'
+
 
 
 export default {
@@ -161,6 +168,7 @@ export default {
     Heater,
     ac, // Why can't AC be all caps?
     Fan,
+    Lock,
 
     // Additional stuff
     NewDeviceIcon,
@@ -170,6 +178,7 @@ export default {
     // icons
     PencilIcon,
     PencilOffIcon,
+
     LightbulbIcon,
     RadiatorIcon,
     FanIcon,
@@ -177,6 +186,7 @@ export default {
     GaugeIcon,
     CctvIcon,
     ImageEditIcon,
+    LockIcon
   },
   mounted(){
     this.compute_floorplan_size()
