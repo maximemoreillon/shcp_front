@@ -6,8 +6,11 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import io from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended'
+
 //import VueCookies from 'vue-cookies'
 import VueDragDrop from 'vue-drag-drop'
+
+import './registerServiceWorker'
 
 
 const socket = io(`${process.env.VUE_APP_SHCP_API_URL}`)
