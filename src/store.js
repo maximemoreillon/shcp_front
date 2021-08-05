@@ -21,6 +21,10 @@ export default new Vuex.Store({
   },
   mutations: {
 
+    set_user(state,user){
+      state.user = user
+    },
+
     // Manage connection status
     set_connected(state, new_state){
       state.connected = new_state;

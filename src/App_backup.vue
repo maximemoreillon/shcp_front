@@ -1,34 +1,22 @@
 <template>
-  <AppTemplate
-    :options="options"
-    @user="user_changed($event)">
+  <div id="app">
 
-  </AppTemplate>
+    <AppTemplate
+      authenticate
+      applicationName="SHCP"/>
+
+
+  </div>
 </template>
 
 <script>
 
-import AppTemplate from '@moreillon/vue_application_template'
+import AppTemplate from '@moreillon/vue_application_template_flex'
 
 export default {
   name: 'App',
   components: {
     AppTemplate,
-  },
-  data(){
-    return {
-      options: {
-        authenticate: true,
-        title: 'SHCP',
-        login_url: `${process.env.VUE_APP_AUTHENTICATION_API_URL}/login`,
-        identification_url: `${process.env.VUE_APP_AUTHENTICATION_API_URL}/v2/whoami`
-      }
-    }
-  },
-  methods: {
-    user_changed(user){
-      this.$store.commit('set_user',user)
-    }
   },
   sockets: {
     connect() {
@@ -37,20 +25,36 @@ export default {
       this.$store.commit('set_connected', true)
 
       // Check if possible to authentify using a JWT
-      const jwt = localStorage.jwt
+      let jwt = this.$cookies.get('jwt')
+      if(!jwt && this.$route.path !== '/login') {
+        //return this.$router.push('/login')
+        //return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
+
+        return
+      }
 
       this.$socket.client.emit('authentication', {jwt})
 
       // Acknowledge current authentication attempt
       this.$store.commit('set_authenticating', true)
 
+      // Does not need to go to the login screen
     },
     unauthorized(data) {
       this.$store.commit('set_authenticating', false)
-
+      //this.$router.push('/login');
+      //return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
     },
     authenticated(data){
 
+      // Save the JWT in cookies
+      // Currently, JWT is obtained using HTTP API call
+      /*
+      if('jwt' in data) {
+        console.log("[Auth] Received a JWT, storing in cookies")
+        this.$cookies.set('jwt', data.jwt);
+      }
+      */
 
       // mark as no longer trying to authenticate
       this.$store.commit('set_authenticating', false)
