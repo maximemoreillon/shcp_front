@@ -189,15 +189,11 @@ export default {
     LockIcon
   },
   mounted(){
-    this.compute_floorplan_size()
 
-    window.onresize = () => {
-      this.compute_floorplan_size()
-    };
-
-    window.onload = () => {
-      this.compute_floorplan_size()
-    }
+    const img = new Image()
+    img.src = this.floorplan_src
+    img.onload = () => { this.compute_floorplan_size() }
+    window.onresize = () => { this.compute_floorplan_size() }
 
   },
   methods: {
