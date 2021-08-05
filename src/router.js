@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Login from './views/Login.vue'
+// import Login from './views/Login.vue'
 import DeviceList from './views/DeviceList.vue'
 import DeviceDetails from './views/DeviceDetails.vue'
 
@@ -17,9 +17,9 @@ export default new Router({
       component: Home
     },
     {
-      path: '/login',
-      name: 'login',
-      component: Login
+      path: '/about',
+      name: 'about',
+      component: () => import('./views/About.vue')
     },
     {
       path: '/device_list',
