@@ -100,6 +100,7 @@
     <!-- WS Diconnection warning modal -->
     <DisconnectionWarning />
 
+    <!-- Floorplan upload model -->
     <Modal
       v-bind:open="floorplan_upload_modal_open"
       v-on:close_modal="floorplan_upload_modal_open = false">
@@ -276,21 +277,16 @@ export default {
     floorplan_upload(){
       // Get image from input
       this.image = this.$refs.floorplan_upload.files[0];
-      if(this.image){
-        let formData = new FormData();
-        formData.append('image', this.image);
-        this.axios.post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': "Bearer " + this.$cookies.get('jwt')
-          }
-        })
-        .then(response => this.$router.go())
-        .catch(error => {
-          alert(`Something went wrong while uploading the floorplan`)
-          console.log(error)
-        })
-      }
+      if(!this.image) return
+      
+      let formData = new FormData();
+      formData.append('image', this.image);
+      this.axios.post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData)
+      .then( () => this.$router.go())
+      .catch(error => {
+        alert(`Something went wrong while uploading the floorplan`)
+        console.log(error)
+      })
     },
   },
 
