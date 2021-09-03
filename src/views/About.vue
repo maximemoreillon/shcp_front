@@ -48,7 +48,7 @@ export default {
         },
         {
           name: 'SHCP API',
-          url: `${process.env.VUE_APP_SHCP_API_URL}/info`,
+          url: process.env.VUE_APP_SHCP_API_URL,
           version: null
         },
         {
