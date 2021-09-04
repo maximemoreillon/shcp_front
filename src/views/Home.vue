@@ -151,7 +151,7 @@ export default {
   data () {
     return {
 
-      floorplan_src: `${process.env.VUE_APP_SHCP_API_URL}/floorplan`,
+
       floorplan_upload_modal_open: false,
 
       floorplan_size: {
@@ -278,7 +278,7 @@ export default {
       // Get image from input
       this.image = this.$refs.floorplan_upload.files[0];
       if(!this.image) return
-      
+
       let formData = new FormData();
       formData.append('image', this.image);
       this.axios.post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData)
@@ -289,6 +289,12 @@ export default {
       })
     },
   },
+  computed: {
+    floorplan_src() {
+      const token = localStorage.jwt || localStorage.token
+      return `${process.env.VUE_APP_SHCP_API_URL}/floorplan?token=${token}`
+    }
+  }
 
 }
 </script>
