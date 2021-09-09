@@ -7,7 +7,7 @@ import VueAxios from 'vue-axios'
 import io from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended'
 
-//import VueCookies from 'vue-cookies'
+import VueCookie from 'vue-cookie'
 import VueDragDrop from 'vue-drag-drop'
 
 import './registerServiceWorker'
@@ -17,10 +17,9 @@ const socket = io(`${process.env.VUE_APP_SHCP_API_URL}`)
 
 Vue.use(VueAxios, axios)
 Vue.use(VueSocketIOExt, socket);
-//Vue.use(VueCookies)
+Vue.use(VueCookie)
 Vue.use(VueDragDrop);
 
-//Vue.$cookies.config('30d')
 
 Vue.config.productionTip = false
 

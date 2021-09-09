@@ -46,7 +46,7 @@ export default {
       this.$store.commit('set_connected', true)
 
       // Check if possible to authentify using a JWT
-      const jwt = localStorage.jwt
+      const jwt = this.$cookie.get('jwt')
 
       this.$socket.client.emit('authentication', {jwt})
 

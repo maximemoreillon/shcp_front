@@ -291,8 +291,8 @@ export default {
   },
   computed: {
     floorplan_src() {
-      const token = localStorage.jwt || localStorage.token
-      return `${process.env.VUE_APP_SHCP_API_URL}/floorplan?token=${token}`
+      const jwt = this.$cookie.get('jwt')
+      return `${process.env.VUE_APP_SHCP_API_URL}/floorplan?token=${jwt}`
     }
   }
 
