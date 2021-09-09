@@ -64,9 +64,6 @@ export default {
     },
     authenticated(data){
 
-      console.log('Authenticated')
-
-
       // mark as no longer trying to authenticate
       this.$store.commit('set_authenticating', false)
 
