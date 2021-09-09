@@ -37,21 +37,25 @@ export default {
   methods: {
     user_changed(user){
       this.$store.commit('set_user',user)
-    }
+      this.ws_auth()
+    },
+    ws_auth(){
+      // Check if possible to authentify using a JWT
+      const jwt = this.$cookie.get('jwt')
+      if(!jwt) return
+
+      this.$socket.client.emit('authentication', {jwt})
+
+      // Acknowledge current authentication attempt
+      this.$store.commit('set_authenticating', true)
+    },
   },
   sockets: {
     connect() {
 
       // Acknowledge connection
       this.$store.commit('set_connected', true)
-
-      // Check if possible to authentify using a JWT
-      const jwt = this.$cookie.get('jwt')
-
-      this.$socket.client.emit('authentication', {jwt})
-
-      // Acknowledge current authentication attempt
-      this.$store.commit('set_authenticating', true)
+      this.ws_auth()
 
     },
     unauthorized(data) {
@@ -59,6 +63,8 @@ export default {
 
     },
     authenticated(data){
+
+      console.log('Authenticated')
 
 
       // mark as no longer trying to authenticate
@@ -73,8 +79,6 @@ export default {
 
       this.$store.commit('set_devices_loading', true)
 
-      // Go back to home screen if not already here
-      //if(this.$route.path !== '/') this.$router.push('/');
     },
     disconnect () {
       this.$store.commit('set_connected', false)
