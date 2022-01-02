@@ -81,12 +81,17 @@ export default {
   methods: {},
   computed: {
     device_is_on(){
-      if(this.device.state && this.device.payload_on){
-        if(this.device.state === this.device.payload_on){
-          return true;
-        }
+
+      try {
+        const parsed_state = JSON.parse(this.device.state)
+        return parsed_state.state.toLowerCase() === 'on'
+      } catch (e) {
+        return this.device.state
+          && this.device.payload_on
+          && this.device.state === this.device.payload_on
       }
-      return false;
+
+
     },
 
     device_disconnected(){
