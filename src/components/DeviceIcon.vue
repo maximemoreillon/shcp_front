@@ -95,14 +95,13 @@ export default {
     },
 
     device_disconnected(){
-      /* this needs to be updated */
 
-      // Check if the device has a parsable state (IP cameras do not)
-      var state = null
       try {
-        state = JSON.parse(this.device.state)
-        if(state.state === 'disconnected') return true
-        else return false
+        const state = JSON.parse(this.device.state)
+
+        return state.state === 'disconnected'
+          || state.connected === false
+
       } catch (e) {
         return false
       }
