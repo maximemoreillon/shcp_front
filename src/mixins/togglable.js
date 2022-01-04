@@ -1,19 +1,7 @@
+import DeviceState from '@/mixins/DeviceState.js'
+
 export const togglable = {
-  computed: {
-    device_is_on(){
-
-      try {
-        const parsed_state = JSON.parse(this.device.state)
-        return parsed_state.state.toLowerCase() === 'on'
-      } catch (e) {
-        return this.device.state
-          && this.device.payload_on
-          && this.device.state === this.device.payload_on
-      }
-
-
-    },
-  },
+  mixins: [DeviceState],
   methods: {
     toggle(){
       var message = {};

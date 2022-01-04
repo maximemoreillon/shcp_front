@@ -25,7 +25,7 @@
       <!-- Badges for disconnection -->
       <transition name="fade">
         <div
-           v-if="device_disconnected"
+           v-if="device_is_disconnected"
            class="icon_badge warning_badge">
           <wifi-off-icon/>
         </div>
@@ -56,11 +56,13 @@
 
 <script>
 
-import HelpIcon from 'vue-material-design-icons/Help.vue';
-import WifiOffIcon from 'vue-material-design-icons/WifiOff.vue';
-import PencilIcon from 'vue-material-design-icons/Pencil.vue';
-import LoadingIcon from 'vue-material-design-icons/Loading.vue';
+// Icons
+import HelpIcon from 'vue-material-design-icons/Help.vue'
+import WifiOffIcon from 'vue-material-design-icons/WifiOff.vue'
+import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import LoadingIcon from 'vue-material-design-icons/Loading.vue'
 
+import DeviceState from '@/mixins/DeviceState.js'
 
 export default {
   name: 'DeviceIcon',
@@ -69,9 +71,8 @@ export default {
       type: Object,
       required: true,
     },
-    icon_class: {
-    },
   },
+  mixins: [DeviceState],
   components: {
     HelpIcon,
     PencilIcon,
@@ -80,33 +81,7 @@ export default {
   },
   methods: {},
   computed: {
-    device_is_on(){
 
-      try {
-        const parsed_state = JSON.parse(this.device.state)
-        return parsed_state.state.toLowerCase() === 'on'
-      } catch (e) {
-        return this.device.state
-          && this.device.payload_on
-          && this.device.state === this.device.payload_on
-      }
-
-
-    },
-
-    device_disconnected(){
-
-      try {
-        const state = JSON.parse(this.device.state)
-
-        return state.state === 'disconnected'
-          || state.connected === false
-
-      } catch (e) {
-        return false
-      }
-
-    },
 
     transfer_data(){
       // Data transfered using drag drop
