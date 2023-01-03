@@ -1,10 +1,10 @@
 export const testmixin = {
   data: function () {
     return {
-      testData: "yooo"
+      testData: 'yooo'
     }
   },
   created: function () {
-    console.log("heloooo")
-  },
-};
+    console.log('heloooo')
+  }
+}

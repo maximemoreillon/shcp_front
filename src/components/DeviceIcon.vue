@@ -69,32 +69,30 @@ export default {
   props: {
     device: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   mixins: [DeviceState],
   components: {
     HelpIcon,
     PencilIcon,
     WifiOffIcon,
-    LoadingIcon,
+    LoadingIcon
   },
   methods: {},
   computed: {
 
-
-    transfer_data(){
+    transfer_data () {
       // Data transfered using drag drop
       return {
-        action: "update",
-        data: this.device,
+        action: 'update',
+        data: this.device
       }
     }
   }
 }
 
 </script>
-
 
 <style>
 
@@ -128,10 +126,6 @@ export default {
   transition: color 0.5s;
 }
 
-
-
-
-
 .icon_badge{
   position: absolute;
   top: 10%;
@@ -153,9 +147,6 @@ export default {
 
 }
 
-
-
-
 .warning_badge {
   background-color: #c00000;
 }
@@ -176,15 +167,12 @@ export default {
 
   background-color: #666666;
 
-
   animation-name: rotation;
   animation-duration: 1s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 
-
 }
-
 
 @keyframes rotation {
   0% {transform: rotate(0deg);}

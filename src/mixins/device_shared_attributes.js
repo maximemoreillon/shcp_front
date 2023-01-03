@@ -2,7 +2,7 @@ import Device from '@/components/Device.vue'
 
 export const device_shared_attributes = {
   components: {
-    Device,
+    Device
   },
   data: function () {
     return {
@@ -12,8 +12,8 @@ export const device_shared_attributes = {
   props: {
     device: {
       type: Object,
-      required: true,
-    },
-  },
+      required: true
+    }
+  }
 
-};
+}

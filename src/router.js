@@ -35,6 +35,6 @@ export default new Router({
       path: '/device_details',
       name: 'device_details',
       component: DeviceDetails
-    },
+    }
   ]
 })

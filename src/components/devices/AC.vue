@@ -11,16 +11,16 @@
 
 <script>
 
-import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
-import {togglable} from '@/mixins/togglable.js'
+import { device_shared_attributes } from '@/mixins/device_shared_attributes.js'
+import { togglable } from '@/mixins/togglable.js'
 
-import AirConditionerIcon from 'vue-material-design-icons/AirConditioner.vue';
+import AirConditionerIcon from 'vue-material-design-icons/AirConditioner.vue'
 
 export default {
   name: 'ac',
   mixins: [
     device_shared_attributes,
-    togglable,
+    togglable
   ],
   components: {
     AirConditionerIcon
@@ -28,18 +28,18 @@ export default {
   props: {
     device: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
 
-  data() {
+  data () {
     return {
       form_fields: [
-        {key: "command_topic", label:"Command topic"},
-        {key: "status_topic", label:"Status topic"},
-        {key: "payload_on", label:"Payload ON"},
-        {key: "payload_off", label:"Payload OFF"}
-      ],
+        { key: 'command_topic', label: 'Command topic' },
+        { key: 'status_topic', label: 'Status topic' },
+        { key: 'payload_on', label: 'Payload ON' },
+        { key: 'payload_off', label: 'Payload OFF' }
+      ]
     }
   }
 

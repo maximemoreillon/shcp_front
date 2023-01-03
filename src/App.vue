@@ -23,48 +23,44 @@ export default {
     AppTemplate,
     InformationOutlineIcon
   },
-  data(){
+  data () {
     return {
       options: {
         authenticate: true,
         title: 'SHCP',
         skip_greetings: process.env.NODE_ENV === 'development',
         login_url: process.env.VUE_APP_LOGIN_URL,
-        identification_url: process.env.VUE_APP_IDENTIFICATION_URL,
+        identification_url: process.env.VUE_APP_IDENTIFICATION_URL
 
       }
     }
   },
   methods: {
-    user_changed(user){
-      this.$store.commit('set_user',user)
+    user_changed (user) {
+      this.$store.commit('set_user', user)
       this.ws_auth()
     },
-    ws_auth(){
+    ws_auth () {
       // Check if possible to authentify using a JWT
       const jwt = this.$cookie.get('jwt')
-      if(!jwt) return
+      if (!jwt) return
 
-      this.$socket.client.emit('authentication', {jwt})
+      this.$socket.client.emit('authentication', { jwt })
 
       // Acknowledge current authentication attempt
       this.$store.commit('set_authenticating', true)
-    },
+    }
   },
   sockets: {
-    connect() {
-
+    connect () {
       // Acknowledge connection
       this.$store.commit('set_connected', true)
       this.ws_auth()
-
     },
-    unauthorized(data) {
+    unauthorized (data) {
       this.$store.commit('set_authenticating', false)
-
     },
-    authenticated(data){
-
+    authenticated (data) {
       // mark as no longer trying to authenticate
       this.$store.commit('set_authenticating', false)
 
@@ -74,29 +70,24 @@ export default {
       // Get devices
       this.$socket.client.emit('get_all_devices', {})
 
-
       this.$store.commit('set_devices_loading', true)
-
     },
     disconnect () {
       this.$store.commit('set_connected', false)
     },
-    some_devices_added_or_updated(device_array) {
+    some_devices_added_or_updated (device_array) {
       this.$store.commit('add_or_update_some_devices', device_array)
     },
-    device_deleted(device){
+    device_deleted (device) {
       this.$store.commit('delete_device', device)
     },
-    all_devices(device_array) {
+    all_devices (device_array) {
       this.$store.commit('delete_all_devices', device_array)
       this.$store.commit('add_or_update_some_devices', device_array)
       this.$store.commit('set_devices_loading', false)
-    },
+    }
 
-  },
-
-
-
+  }
 
 }
 </script>
@@ -116,11 +107,9 @@ header a {
   align-items: center;
 }
 
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
-
 
 .fade-enter, .fade-leave-to{
   opacity: 0;

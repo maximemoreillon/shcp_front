@@ -1,32 +1,28 @@
 <template>
   <div class="home">
-
     <!-- Button to open side menu -->
     <div
       class="control_icon_wrapper new_devices_area_open_button_wrapper"
-      v-on:click="$store.commit('set_edit_mode', true)">
-      <pencil-icon
-        class="new_devices_area_open_button control_icon" />
+      @click="$store.commit('set_edit_mode', true)"
+    >
+      <pencil-icon class="new_devices_area_open_button control_icon" />
     </div>
-
 
     <!-- Side menu to add devices -->
     <div
       class="new_device_area_wrapper"
-      v-bind:class="{open: $store.state.edit_mode}">
-
+      :class="{ open: $store.state.edit_mode }"
+    >
       <!-- close button -->
       <div
         class="control_icon_wrapper"
-        v-on:click="$store.commit('set_edit_mode', false)">
-        <pencil-off-icon
-          class="new_devices_area_close_button control_icon"
-          />
+        @click="$store.commit('set_edit_mode', false)"
+      >
+        <pencil-off-icon class="new_devices_area_close_button control_icon" />
       </div>
 
-
       <!-- divider -->
-      <div class="divider"/>
+      <div class="divider" />
 
       <!-- Icons for new devices -->
       <NewDeviceIcon component="Light">
@@ -48,70 +44,58 @@
         <gauge-icon />
       </NewDeviceIcon>
 
-
       <!-- divider -->
-      <div class="divider"/>
+      <div class="divider" />
 
       <div
-        v-on:click="floorplan_upload_modal_open = true"
-        class="control_icon_wrapper">
-        <image-edit-icon
-          class="new_devices_area_close_button control_icon" />
+        @click="floorplan_upload_modal_open = true"
+        class="control_icon_wrapper"
+      >
+        <image-edit-icon class="new_devices_area_close_button control_icon" />
       </div>
-
-
     </div>
 
     <!-- the floorplan -->
-    <drop
-      class="floorplan_wrapper"
-      v-on:drop="drop"
-      v-on:dragenter="dragenter">
-
+    <drop class="floorplan_wrapper" @drop="drop" @dragenter="dragenter">
       <!-- is ID needed? -->
       <img
         id="floorplan"
         ref="floorplan"
         class="floorplan droptarget"
         alt="floorplan"
-        v-bind:style="floorplan_size"
-        v-bind:class="{loading: $store.state.devices_loading}"
-        v-bind:src="floorplan_src"
-        v-on:click="floorplan_clicked($event)"
-        v-on:contextmenu.prevent="$store.commit('set_edit_mode', true)"/>
+        :style="floorplan_size"
+        :class="{ loading: $store.state.devices_loading }"
+        :src="floorplan_src"
+        @click="floorplan_clicked($event)"
+        @contextmenu.prevent="$store.commit('set_edit_mode', true)"
+      />
 
       <!-- Devices are stored in Vuex -->
       <component
-        v-for="(device,index) in $store.state.devices"
-        v-bind:key="device._id"
-        v-bind:device="device"
-        v-bind:is="device.type"/>
+        v-for="device in $store.state.devices"
+        :key="device._id"
+        :device="device"
+        :is="device.type"
+      />
 
       <transition name="fade">
-        <span
-          class="devices_loader"
-          v-if="$store.state.devices_loading"/>
+        <span class="devices_loader" v-if="$store.state.devices_loading" />
       </transition>
-
-
     </drop>
-
 
     <!-- WS Diconnection warning modal -->
     <DisconnectionWarning />
 
     <!-- Floorplan upload model -->
     <Modal
-      v-bind:open="floorplan_upload_modal_open"
-      v-on:close_modal="floorplan_upload_modal_open = false">
-
+      :open="floorplan_upload_modal_open"
+      @close_modal="floorplan_upload_modal_open = false"
+    >
       <h2>Upload new floorplan</h2>
 
-      <input type="file" ref="floorplan_upload">
-      <button type="button" v-on:click="floorplan_upload()">upload</button>
-
+      <input type="file" ref="floorplan_upload" />
+      <button type="button" @click="floorplan_upload()">upload</button>
     </Modal>
-
   </div>
 </template>
 
@@ -131,7 +115,7 @@ import NewDeviceIcon from '@/components/NewDeviceIcon.vue'
 import DisconnectionWarning from '@/components/DisconnectionWarning.vue'
 import Modal from '@/components/Modal.vue'
 
-import PencilIcon from 'vue-material-design-icons/Pencil.vue';
+import PencilIcon from 'vue-material-design-icons/Pencil.vue'
 import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue'
 
 // Icons of the devices, NOT IDEAL
@@ -144,21 +128,16 @@ import CctvIcon from 'vue-material-design-icons/Cctv.vue'
 import ImageEditIcon from 'vue-material-design-icons/ImageEdit.vue'
 import LockIcon from 'vue-material-design-icons/Lock.vue'
 
-
-
 export default {
   name: 'home',
   data () {
     return {
-
-
       floorplan_upload_modal_open: false,
 
       floorplan_size: {
         width: undefined,
-        height: undefined,
+        height: undefined
       }
-
     }
   },
   components: {
@@ -189,118 +168,112 @@ export default {
     ImageEditIcon,
     LockIcon
   },
-  mounted(){
-
+  mounted () {
     const img = new Image()
     img.src = this.floorplan_src
-    img.onload = () => { this.compute_floorplan_size() }
-    window.onresize = () => { this.compute_floorplan_size() }
-
+    img.onload = () => {
+      this.compute_floorplan_size()
+    }
+    window.onresize = () => {
+      this.compute_floorplan_size()
+    }
   },
   methods: {
-    compute_floorplan_size(){
-
+    compute_floorplan_size () {
       // DIRTY
 
       let original_floorplan_width = this.$refs.floorplan.naturalWidth
       let original_floorplan_height = this.$refs.floorplan.naturalHeight
 
       let available_vertical_space = window.innerHeight - 250
-      let available_horizontal_space = window.innerWidth - 2*65
+      let available_horizontal_space = window.innerWidth - 2 * 65
 
-      let horizontal_scaling = available_horizontal_space/original_floorplan_width
-      let vertical_scaling = available_vertical_space/original_floorplan_height
+      let horizontal_scaling =
+        available_horizontal_space / original_floorplan_width
+      let vertical_scaling =
+        available_vertical_space / original_floorplan_height
 
-      if(vertical_scaling < horizontal_scaling){
-        this.floorplan_size.height = (original_floorplan_height * vertical_scaling) + "px"
+      if (vertical_scaling < horizontal_scaling) {
+        this.floorplan_size.height =
+          original_floorplan_height * vertical_scaling + 'px'
         this.floorplan_size.width = undefined
-      }
-      else {
+      } else {
         this.floorplan_size.height = undefined
-        this.floorplan_size.width = (original_floorplan_width * horizontal_scaling) + "px"
+        this.floorplan_size.width =
+          original_floorplan_width * horizontal_scaling + 'px'
       }
-
     },
 
-    floorplan_clicked(event) {
-      if(this.$store.state.edit_mode){
+    floorplan_clicked (event) {
+      if (this.$store.state.edit_mode) {
         this.$store.commit('set_edit_mode', false)
       }
     },
 
-
-    dragenter(){
-      //this.new_devices_menu_open = false;
+    dragenter () {
+      // this.new_devices_menu_open = false;
     },
 
-    drop(transfer_data, event) {
-
-      if(event.target.id === "floorplan"){
+    drop (transfer_data, event) {
+      if (event.target.id === 'floorplan') {
         // Device has been dropped on the floorplan
 
         let position = {
-          x: 100*event.offsetX / event.target.width,
-          y: 100*event.offsetY / event.target.height,
+          x: (100 * event.offsetX) / event.target.width,
+          y: (100 * event.offsetY) / event.target.height
         }
 
-        if(transfer_data.action === "create"){
-
+        if (transfer_data.action === 'create') {
           const device_properties = {
             position: position,
             type: transfer_data.data.component
           }
           // Create a new device
           this.$socket.client.emit('create_device', device_properties)
-        }
-        else if(transfer_data.action === "update"){
+        } else if (transfer_data.action === 'update') {
           // Update an existing device (i.e. move it)
 
-          if(this.$store.state.edit_mode){
-
-            let device = transfer_data.data;
+          if (this.$store.state.edit_mode) {
+            let device = transfer_data.data
             device.position = position
-            this.$socket.client.emit('update_device', device);
+            this.$socket.client.emit('update_device', device)
 
             // Mark device as loading
             this.$set(device, 'loading', true)
           }
-
         }
-      }
-      else if(event.target.id === transfer_data.data._id){
+      } else if (event.target.id === transfer_data.data._id) {
         // Device dropped on itself
         // this isequivalent to a long press on mobile
         this.$store.commit('set_edit_mode', true)
-
       }
     },
-    floorplan_upload(){
+    floorplan_upload () {
       // Get image from input
-      this.image = this.$refs.floorplan_upload.files[0];
-      if(!this.image) return
+      this.image = this.$refs.floorplan_upload.files[0]
+      if (!this.image) return
 
-      let formData = new FormData();
-      formData.append('image', this.image);
-      this.axios.post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData)
-      .then( () => this.$router.go())
-      .catch(error => {
-        alert(`Something went wrong while uploading the floorplan`)
-        console.log(error)
-      })
-    },
+      let formData = new FormData()
+      formData.append('image', this.image)
+      this.axios
+        .post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData)
+        .then(() => this.$router.go())
+        .catch((error) => {
+          alert(`Something went wrong while uploading the floorplan`)
+          console.log(error)
+        })
+    }
   },
   computed: {
-    floorplan_src() {
+    floorplan_src () {
       const jwt = this.$cookie.get('jwt')
       return `${process.env.VUE_APP_SHCP_API_URL}/floorplan?token=${jwt}`
     }
   }
-
 }
 </script>
 
 <style scoped>
-
 .home {
   //margin-top: 1em;
   position: relative;
@@ -309,11 +282,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
-.floorplan_wrapper{
-
+.floorplan_wrapper {
   /* used to position components absolutely */
   position: relative;
 
@@ -322,20 +293,18 @@ export default {
   margin-bottom: 25px;
   margin-left: auto;
   margin-right: auto;
-
 }
 
-.floorplan{
+.floorplan {
   //width: 50vmin;
   transition: opacity 0.25s;
 }
 
-.floorplan.loading{
+.floorplan.loading {
   opacity: 0.2;
 }
 
-
-.devices_loader{
+.devices_loader {
   z-index: 29;
   width: 20vmin;
   height: 20vmin;
@@ -348,22 +317,24 @@ export default {
   border-style: solid;
   border-color: #c00000 transparent #c00000 transparent;
   /* Position by center and not by corner */
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 
   animation-name: rotation;
   animation-duration: 1s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-
 }
 
 @keyframes rotation {
-  0% {transform: translate(-50%,-50%) rotate(0deg);}
-  100% {transform: translate(-50%,-50%) rotate(360deg);}
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
-.new_device_area_wrapper{
-
+.new_device_area_wrapper {
   color: #444444;
 
   position: absolute;
@@ -371,18 +342,15 @@ export default {
   left: 0;
   z-index: 10;
 
-
   transition: transform 0.5s, box-shadow 0.5s;
 
   background: white;
-
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   font-size: 200%;
-
 }
 
 .control_icon_wrapper {
@@ -392,17 +360,16 @@ export default {
   //padding: 15px;
 }
 
- .new_device_area_wrapper .material-design-icon {
-   cursor: pointer;
- }
+.new_device_area_wrapper .material-design-icon {
+  cursor: pointer;
+}
 
-.new_device_area_wrapper.open{
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+.new_device_area_wrapper.open {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .new_device_area_wrapper:not(.open) {
   transform: translateX(-100%);
-
 }
 
 .new_device_area_wrapper > *:not(.divider) {
@@ -413,7 +380,6 @@ export default {
   width: 75%;
   border-bottom: 1px solid #dddddd;
 }
-
 
 .new_devices_area_open_button {
   color: #444444;
@@ -435,17 +401,17 @@ export default {
   transition: color 0.25s;
 }
 
-
 .new_devices_area_close_button {
   cursor: pointer;
   transition: color 0.25s;
 }
 
-.new_devices_area_open_button:hover, .new_devices_area_close_button:hover {
+.new_devices_area_open_button:hover,
+.new_devices_area_close_button:hover {
   color: #c00000;
 }
 
-.new_device_area_wrapper_background{
+.new_device_area_wrapper_background {
   position: fixed;
   left: 0;
   top: 0;
@@ -460,13 +426,11 @@ export default {
 
 .new_device_area_wrapper_background.visible {
   opacity: 0.5;
-  visibility: visible;;
+  visibility: visible;
 }
 
 .new_device_area_wrapper_background > div {
   width: 100%;
   height: 100%;
 }
-
-
 </style>

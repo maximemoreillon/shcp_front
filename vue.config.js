@@ -4,6 +4,6 @@ module.exports = {
   },
   pwa: {
     name: 'SHCP',
-    themeColor: '#444444',
+    themeColor: '#444444'
   }
 }

@@ -7,25 +7,24 @@
     <alert-outline-icon class="warning_icon"/>
     <span class="warning_text">DISCONNECTED</span>
 
-
   </div>
 </template>
 
 <script>
-import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue';
+import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 
 export default {
   name: 'DisconnectionWarning',
   components: {
     AlertOutlineIcon
   },
-  data(){
+  data () {
     return {
-      enabled: false,
+      enabled: false
     }
   },
-  mounted() {
-    setTimeout(() => {this.enabled = true}, 1000)
+  mounted () {
+    setTimeout(() => { this.enabled = true }, 1000)
   },
   computed: {
 

@@ -6,8 +6,6 @@
       v-if="show"
       v-bind:icon_class="icon_class"/>
 
-
-
     <!-- MODAL NOT OPENING -->
     <Modal
       v-bind:open="modal_open"
@@ -51,46 +49,46 @@ export default {
   name: 'NewDevice',
   components: {
     DeviceIcon,
-    Modal,
+    Modal
   },
   props: {
     device: Object,
     show: Boolean,
-    modal_open: Boolean,
+    modal_open: Boolean
   },
   data () {
     return {
-      icon_class : "mdi-plus-circle-outline",
+      icon_class: 'mdi-plus-circle-outline',
 
-      selected_type: "Light",
+      selected_type: 'Light',
 
-      device_types : [
-        {label: "MQTT light", component: "Light"},
-        {label: "IP camera", component: "Camera"},
-        {label: "MQTT sensor", component: "Sensor"},
-        {label: "MQTT heater", component: "Heater"},
-        {label: "MQTT air conditioner", component: "ac"},
-        {label: "MQTT fan", component: "Fan"},
+      device_types: [
+        { label: 'MQTT light', component: 'Light' },
+        { label: 'IP camera', component: 'Camera' },
+        { label: 'MQTT sensor', component: 'Sensor' },
+        { label: 'MQTT heater', component: 'Heater' },
+        { label: 'MQTT air conditioner', component: 'ac' },
+        { label: 'MQTT fan', component: 'Fan' }
       ],
 
-      device_copy: {},
+      device_copy: {}
 
     }
   },
   methods: {
-    close_modal(){
-      this.$emit('close_new_device_modal');
+    close_modal () {
+      this.$emit('close_new_device_modal')
     },
-    add_device_in_back_end() {
-      console.log("[WS] add_one_device_in_back_end");
+    add_device_in_back_end () {
+      console.log('[WS] add_one_device_in_back_end')
 
-      this.device_copy = JSON.parse(JSON.stringify(this.device));
+      this.device_copy = JSON.parse(JSON.stringify(this.device))
       this.device_copy.type = this.selected_type
 
-      this.$socket.client.emit('add_one_device_in_back_end', this.device_copy);
-      this.$emit('close_new_device_modal');
-    },
-  },
+      this.$socket.client.emit('add_one_device_in_back_end', this.device_copy)
+      this.$emit('close_new_device_modal')
+    }
+  }
 
 }
 </script>

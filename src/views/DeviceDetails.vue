@@ -12,8 +12,8 @@ export default {
   props: {
     device_id: String
   },
-  computed:{
-    device(){
+  computed: {
+    device () {
       return this.$store.state.devices.find(element => element._id === this.$route.query.id)
     }
   }

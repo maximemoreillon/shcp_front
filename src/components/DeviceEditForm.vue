@@ -20,13 +20,13 @@ export default {
     open: {
       type: Boolean,
       default: false
-    },
+    }
   },
   methods: {
     close_modal () {
-      this.$emit('close_modal');
+      this.$emit('close_modal')
     }
-  },
+  }
 }
 </script>
 

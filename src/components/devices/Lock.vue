@@ -14,33 +14,32 @@
 <script>
 
 // Importing mixins
-import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
-import {togglable} from '@/mixins/togglable.js'
+import { device_shared_attributes } from '@/mixins/device_shared_attributes.js'
+import { togglable } from '@/mixins/togglable.js'
 
 import LockIcon from 'vue-material-design-icons/Lock.vue'
-
 
 export default {
   name: 'Light',
   mixins: [
     device_shared_attributes,
-    togglable,
+    togglable
 
-    //LightbulbIcon,
+    // LightbulbIcon,
   ],
   components: {
-    LockIcon,
+    LockIcon
   },
-  data() {
+  data () {
     return {
       form_fields: [
-        {key: "command_topic", label:"Command topic"},
-        {key: "status_topic", label:"Status topic"},
-        {key: "payload_on", label:"Payload ON"},
-        {key: "payload_off", label:"Payload OFF"}
-      ],
+        { key: 'command_topic', label: 'Command topic' },
+        { key: 'status_topic', label: 'Status topic' },
+        { key: 'payload_on', label: 'Payload ON' },
+        { key: 'payload_off', label: 'Payload OFF' }
+      ]
     }
-  },
+  }
 
 }
 </script>

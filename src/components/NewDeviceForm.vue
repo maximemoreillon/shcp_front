@@ -39,12 +39,12 @@ export default {
   name: 'NewDevice',
   components: {
     DeviceIcon,
-    Modal,
+    Modal
   },
   props: {
     device: Object,
     show: Boolean,
-    modal_open: Boolean,
+    modal_open: Boolean
   },
   data: function () {
     return {
@@ -52,16 +52,16 @@ export default {
     }
   },
   methods: {
-    close_modal: function(){
-      this.$emit('close_new_device_modal');
+    close_modal: function () {
+      this.$emit('close_new_device_modal')
     },
-    add_device_in_back_end: function() {
-      console.log("[WS] add_one_device_in_back_end");
-      console.log("TO BE IMPLEMENTED")
-      //socket.emit('add_one_device_in_back_end', this.device_copy);
-      this.$emit('close_new_device_modal');
-    },
-  },
+    add_device_in_back_end: function () {
+      console.log('[WS] add_one_device_in_back_end')
+      console.log('TO BE IMPLEMENTED')
+      // socket.emit('add_one_device_in_back_end', this.device_copy);
+      this.$emit('close_new_device_modal')
+    }
+  }
 
 }
 </script>

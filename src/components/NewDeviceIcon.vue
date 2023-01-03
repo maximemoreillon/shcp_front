@@ -11,38 +11,30 @@
 export default {
   name: 'NewDeviceIcon',
   props: {
-    component: String,
+    component: String
   },
   methods: {
 
   },
   computed: {
-    transfer_data(){
+    transfer_data () {
       return {
-        action: "create",
-        data: {component: this.component},
+        action: 'create',
+        data: { component: this.component }
       }
     }
-  },
+  }
 }
 
 </script>
 
-
 <style scoped>
-
-
 
 .device_icon {
 
   /* default color */
   color: #535353;
 
-
 }
-
-
-
-
 
 </style>

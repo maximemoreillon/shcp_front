@@ -12,17 +12,16 @@
 </template>
 <script>
 
-import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
-import {togglable} from '@/mixins/togglable.js'
+import { device_shared_attributes } from '@/mixins/device_shared_attributes.js'
+import { togglable } from '@/mixins/togglable.js'
 
-import FanIcon from 'vue-material-design-icons/Fan.vue';
-
+import FanIcon from 'vue-material-design-icons/Fan.vue'
 
 export default {
   name: 'Fan',
   mixins: [
     device_shared_attributes,
-    togglable,
+    togglable
   ],
   components: {
     FanIcon
@@ -30,14 +29,13 @@ export default {
   data: function () {
     return {
       form_fields: [
-        {key: "command_topic", label:"Command topic"},
-        {key: "status_topic", label:"Status topic"},
-        {key: "payload_on", label:"Payload ON"},
-        {key: "payload_off", label:"Payload OFF"}
-      ],
+        { key: 'command_topic', label: 'Command topic' },
+        { key: 'status_topic', label: 'Status topic' },
+        { key: 'payload_on', label: 'Payload ON' },
+        { key: 'payload_off', label: 'Payload OFF' }
+      ]
     }
-  },
-
+  }
 
 }
 </script>

@@ -14,17 +14,16 @@
 
 <script>
 
-import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
-import {togglable} from '@/mixins/togglable.js'
+import { device_shared_attributes } from '@/mixins/device_shared_attributes.js'
+import { togglable } from '@/mixins/togglable.js'
 
-import RadiatorIcon from 'vue-material-design-icons/Radiator.vue';
-
+import RadiatorIcon from 'vue-material-design-icons/Radiator.vue'
 
 export default {
   name: 'Heater',
   mixins: [
     device_shared_attributes,
-    togglable,
+    togglable
   ],
   components: {
     RadiatorIcon
@@ -32,29 +31,29 @@ export default {
   props: {
     device: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   data () {
     return {
       form_fields: [
-        {key: "command_topic", label:"Command topic"},
-        {key: "status_topic", label:"Status topic"},
-        {key: "payload_on", label:"Payload ON"},
-        {key: "payload_off", label:"Payload OFF"}
-      ],
+        { key: 'command_topic', label: 'Command topic' },
+        { key: 'status_topic', label: 'Status topic' },
+        { key: 'payload_on', label: 'Payload ON' },
+        { key: 'payload_off', label: 'Payload OFF' }
+      ]
     }
   },
   computed: {
     // Would be nice to simplify this a bit
     // Maybe put that in a mixin
-    icon_class(){
-      if(this.device.state && this.device.payload_on){
-        if(this.device.state === this.device.payload_on){
-          return "on"
+    icon_class () {
+      if (this.device.state && this.device.payload_on) {
+        if (this.device.state === this.device.payload_on) {
+          return 'on'
         }
       }
-      return "";
+      return ''
     }
   }
 

@@ -26,11 +26,7 @@
         <LightbulbIcon />
       </div>
 
-
     </div>
-
-
-
 
   </div>
 </template>
@@ -39,11 +35,10 @@
 
 import LightbulbIcon from 'vue-material-design-icons/Lightbulb.vue'
 
-
 export default {
   name: 'DragDropTest',
   components: {
-    LightbulbIcon,
+    LightbulbIcon
   },
   data () {
     return {
@@ -51,15 +46,11 @@ export default {
       dragged_device_index: -1,
       edit_mode: true,
 
-
-
       devices: [
         {
-          position: {x: 50, y: 50},
+          position: { x: 50, y: 50 }
         }
       ]
-
-
 
     }
   },
@@ -67,28 +58,27 @@ export default {
 
   },
   methods: {
-    device_styles(device){
-      const {x,y} = device.position
+    device_styles (device) {
+      const { x, y } = device.position
       const dragged_device = this.devices[this.dragged_device_index]
       return {
         top: `${y}%`,
         left: `${x}%`,
-        cursor: device ===  dragged_device ? 'grabbing' : 'grab',
+        cursor: device === dragged_device ? 'grabbing' : 'grab'
       }
     },
-    wrapper_mousedown(){
+    wrapper_mousedown () {
     },
-    wrapper_mouseup(){
-      if(this.dragged_device_index > -1) {
-        //console.log(`Releasing ${this.dragged_device_index}`)
+    wrapper_mouseup () {
+      if (this.dragged_device_index > -1) {
+        // console.log(`Releasing ${this.dragged_device_index}`)
         this.dragged_device_index = -1
       }
-
     },
-    wrapper_mousemove(event){
-      if(this.dragged_device_index < 0) return
+    wrapper_mousemove (event) {
+      if (this.dragged_device_index < 0) return
       const dragged_device = this.devices[this.dragged_device_index]
-      const {x: dragX, y: dragY} = event
+      const { x: dragX, y: dragY } = event
 
       // corner: 377, 88
 
@@ -96,28 +86,23 @@ export default {
         x: wrapperX,
         y: wrapperY,
         width: floorplanWidth,
-        height: floorplanHeight,
+        height: floorplanHeight
       } = this.$refs.floorplan.getBoundingClientRect()
-
-
-
 
       // No idea why needs to be divided by 2
       dragged_device.position = {
-        x: Math.round(100 * (dragX - wrapperX)/floorplanWidth),
-        y: Math.round(100 * (dragY - wrapperY)/floorplanHeight)
+        x: Math.round(100 * (dragX - wrapperX) / floorplanWidth),
+        y: Math.round(100 * (dragY - wrapperY) / floorplanHeight)
       }
     },
-    device_mousedown(device_index){
+    device_mousedown (device_index) {
       this.dragged_device_index = device_index
-      //console.log(`Draggind ${this.dragged_device_index}`)
+      // console.log(`Draggind ${this.dragged_device_index}`)
     },
-    device_mouseup(){
-      //console.log("device_mouseup")
+    device_mouseup () {
+      // console.log("device_mouseup")
 
-    },
-
-
+    }
 
   }
 
@@ -160,7 +145,6 @@ export default {
   outline: 1px solid green;
   display: flex;
 }
-
 
 .new_device_wrapper {
   font-size: 200%;

@@ -12,7 +12,6 @@
       <gauge-icon v-else/>
     </template>
 
-
     <!-- This device features a modal used in the slot-->
     <Modal
       v-bind:open="modal_open"
@@ -24,16 +23,13 @@
           {{device.measurement_name}}
         </div>
 
-
         <div class="sensor_modal_content" v-if="this.device.json_key && this.device.state">
           {{JSON.parse(device.state.replace(/'/g,'"'))[device.json_key]}} {{device.unit}}
         </div>
 
-
         <div class="sensor_modal_content" v-else>
           {{device.state}}
         </div>
-
 
       </div>
     </Modal>
@@ -43,11 +39,10 @@
 
 <script>
 
-import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
-import {device_with_modal} from '@/mixins/device_with_modal.js'
+import { device_shared_attributes } from '@/mixins/device_shared_attributes.js'
+import { device_with_modal } from '@/mixins/device_with_modal.js'
 
-import GaugeIcon from 'vue-material-design-icons/Gauge.vue';
-
+import GaugeIcon from 'vue-material-design-icons/Gauge.vue'
 
 export default {
   name: 'Sensor',
@@ -62,26 +57,25 @@ export default {
     return {
 
       form_fields: [
-        {key: "measurement_name", label:"Measurement name"},
-        {key: "status_topic", label:"Status topic"},
-        {key: "json_key", label:"JSON key"},
-        {key: "unit", label:"Unit"},
+        { key: 'measurement_name', label: 'Measurement name' },
+        { key: 'status_topic', label: 'Status topic' },
+        { key: 'json_key', label: 'JSON key' },
+        { key: 'unit', label: 'Unit' }
       ],
 
-      modal_open: false,
+      modal_open: false
 
     }
   },
   computed: {
-    icon_additional_content(){
-      if(this.device.json_key && this.device.state){
-        if(JSON.parse(this.device.state.replace(/'/g,'"'))[this.device.json_key]){
-          return JSON.parse(this.device.state.replace(/'/g,'"'))[this.device.json_key] + this.device.unit
+    icon_additional_content () {
+      if (this.device.json_key && this.device.state) {
+        if (JSON.parse(this.device.state.replace(/'/g, '"'))[this.device.json_key]) {
+          return JSON.parse(this.device.state.replace(/'/g, '"'))[this.device.json_key] + this.device.unit
         }
       }
-      return ""
-
-    },
+      return ''
+    }
 
   }
 

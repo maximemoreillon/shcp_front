@@ -5,7 +5,6 @@
       authenticate
       applicationName="SHCP"/>
 
-
   </div>
 </template>
 
@@ -16,37 +15,35 @@ import AppTemplate from '@moreillon/vue_application_template_flex'
 export default {
   name: 'App',
   components: {
-    AppTemplate,
+    AppTemplate
   },
   sockets: {
-    connect() {
-
+    connect () {
       // Acknowledge connection
       this.$store.commit('set_connected', true)
 
       // Check if possible to authentify using a JWT
       let jwt = this.$cookies.get('jwt')
-      if(!jwt && this.$route.path !== '/login') {
-        //return this.$router.push('/login')
-        //return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
+      if (!jwt && this.$route.path !== '/login') {
+        // return this.$router.push('/login')
+        // return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
 
         return
       }
 
-      this.$socket.client.emit('authentication', {jwt})
+      this.$socket.client.emit('authentication', { jwt })
 
       // Acknowledge current authentication attempt
       this.$store.commit('set_authenticating', true)
 
       // Does not need to go to the login screen
     },
-    unauthorized(data) {
+    unauthorized (data) {
       this.$store.commit('set_authenticating', false)
-      //this.$router.push('/login');
-      //return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
+      // this.$router.push('/login');
+      // return window.location.href = `${process.env.VUE_APP_AUTHENTICATION_FRONT_URL}`
     },
-    authenticated(data){
-
+    authenticated (data) {
       // Save the JWT in cookies
       // Currently, JWT is obtained using HTTP API call
       /*
@@ -65,31 +62,27 @@ export default {
       // Get devices
       this.$socket.client.emit('get_all_devices', {})
 
-
       this.$store.commit('set_devices_loading', true)
 
       // Go back to home screen if not already here
-      //if(this.$route.path !== '/') this.$router.push('/');
+      // if(this.$route.path !== '/') this.$router.push('/');
     },
     disconnect () {
       this.$store.commit('set_connected', false)
     },
-    some_devices_added_or_updated(device_array) {
+    some_devices_added_or_updated (device_array) {
       this.$store.commit('add_or_update_some_devices', device_array)
     },
-    device_deleted(device){
+    device_deleted (device) {
       this.$store.commit('delete_device', device)
     },
-    all_devices(device_array) {
+    all_devices (device_array) {
       this.$store.commit('delete_all_devices', device_array)
       this.$store.commit('add_or_update_some_devices', device_array)
       this.$store.commit('set_devices_loading', false)
-    },
+    }
 
-  },
-
-
-
+  }
 
 }
 </script>
@@ -102,11 +95,9 @@ main {
   margin: 0 !important;
 }
 
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
-
 
 .fade-enter, .fade-leave-to{
   opacity: 0;

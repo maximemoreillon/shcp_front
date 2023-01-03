@@ -5,8 +5,6 @@
       A control panel for smart homes developped and maintained by <a href="https://maximemoreillon.com">Maxime MOREILLON</a>
     </p>
 
-
-
     <h2>Services</h2>
     <table>
       <tr>
@@ -22,8 +20,6 @@
         <td>{{service.url}}</td>
       </tr>
     </table>
-
-
 
   </div>
 </template>
@@ -56,8 +52,7 @@ export default {
           url: process.env.VUE_APP_AUTHENTICATION_API_URL,
           version: null
         }
-      ],
-
+      ]
 
     }
   },

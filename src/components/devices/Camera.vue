@@ -32,44 +32,41 @@
 
 <script>
 
-import {device_shared_attributes} from '@/mixins/device_shared_attributes.js'
-import {device_with_modal} from '@/mixins/device_with_modal.js'
+import { device_shared_attributes } from '@/mixins/device_shared_attributes.js'
+import { device_with_modal } from '@/mixins/device_with_modal.js'
 
-import CctvIcon from 'vue-material-design-icons/Cctv.vue';
-
+import CctvIcon from 'vue-material-design-icons/Cctv.vue'
 
 export default {
   name: 'Camera',
   mixins: [
     device_with_modal,
-    device_shared_attributes,
+    device_shared_attributes
   ],
   components: {
-    CctvIcon,
+    CctvIcon
   },
-  data() {
+  data () {
     return {
       form_fields: [
-        {key: "stream_url", label:"Stream URL"},
+        { key: 'stream_url', label: 'Stream URL' }
       ],
       modal_open: false,
-      camera_image_url: null,
+      camera_image_url: null
     }
   },
   methods: {
-    open_modal(){
-      this.modal_open = true;
+    open_modal () {
+      this.modal_open = true
 
-      if(process.env.VUE_APP_SOCKETIO_SERVER_URL) this.camera_image_url = `${process.env.VUE_APP_SOCKETIO_SERVER_URL}/camera?_id=${this.device._id}&jwt=${this.$cookies.get('jwt')}`
+      if (process.env.VUE_APP_SOCKETIO_SERVER_URL) this.camera_image_url = `${process.env.VUE_APP_SOCKETIO_SERVER_URL}/camera?_id=${this.device._id}&jwt=${this.$cookies.get('jwt')}`
       else this.camera_image_url = `camera?_id${this.device._id}&jwt=${this.$cookies.get('jwt')}`
-
-
     },
-    close_modal(){
-      this.modal_open = false;
+    close_modal () {
+      this.modal_open = false
       this.camera_image_url = null
     }
-  },
+  }
 
 }
 </script>
