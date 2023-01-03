@@ -87,13 +87,18 @@
     <DisconnectionWarning />
 
     <!-- Floorplan upload model -->
+    <!-- TODO: Make this a component -->
     <Modal
       :open="floorplan_upload_modal_open"
       @close_modal="floorplan_upload_modal_open = false"
     >
       <h2>Upload new floorplan</h2>
 
-      <input type="file" ref="floorplan_upload" />
+      <input
+        type="file"
+        ref="floorplan_upload"
+        accept="image/png, image/jpeg"
+      />
       <button type="button" @click="floorplan_upload()">upload</button>
     </Modal>
   </div>
@@ -275,7 +280,7 @@ export default {
 
 <style scoped>
 .home {
-  //margin-top: 1em;
+  /* margin-top: 1em; */
   position: relative;
   height: 100%;
   /* Using flex so that wrapper takes dimensions of content */
@@ -296,7 +301,7 @@ export default {
 }
 
 .floorplan {
-  //width: 50vmin;
+  /* width: 50vmin; */
   transition: opacity 0.25s;
 }
 
@@ -357,7 +362,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  //padding: 15px;
+  /* padding: 15px; */
 }
 
 .new_device_area_wrapper .material-design-icon {
