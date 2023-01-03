@@ -146,7 +146,7 @@ export default {
     Camera,
     Sensor,
     Heater,
-    ac, // Why can't AC be all caps?
+    ac,
     Fan,
     Lock,
 
@@ -260,7 +260,7 @@ export default {
         .then(() => this.$router.go())
         .catch((error) => {
           alert(`Something went wrong while uploading the floorplan`)
-          console.log(error)
+          console.error(error)
         })
     }
   },
