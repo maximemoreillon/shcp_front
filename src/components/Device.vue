@@ -41,73 +41,81 @@
 </template>
 
 <script>
-import Modal from '@/components/Modal.vue'
-import DeviceIcon from '@/components/DeviceIcon.vue'
+import Modal from "@/components/Modal.vue";
+import DeviceIcon from "@/components/DeviceIcon.vue";
 
-import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import ContentSaveIcon from "vue-material-design-icons/ContentSave.vue";
+import DeleteIcon from "vue-material-design-icons/Delete.vue";
 
 export default {
-  name: 'Device',
+  name: "Device",
   mixins: [],
   components: {
     Modal,
     DeviceIcon,
     DeleteIcon,
-    ContentSaveIcon
+    ContentSaveIcon,
   },
   props: {
     device: {
       type: Object,
-      required: true
+      required: true,
     },
     form_fields: {
       type: Array,
-      default () {
-        return []
-      }
-    }
+      default() {
+        return [];
+      },
+    },
   },
-  data () {
+  data() {
     return {
-      edit_modal_open: false
-    }
+      edit_modal_open: false,
+    };
   },
 
   methods: {
-    icon_clicked () {
-      if (this.$store.state.edit_mode) this.open_edit_modal()
-      else this.$emit('icon_clicked')
+    icon_clicked() {
+      if (this.$store.state.edit_mode) this.open_edit_modal();
+      else this.$emit("icon_clicked");
     },
-    icon_right_clicked () {
-      this.$store.commit('toggle_edit_mode')
+    icon_right_clicked() {
+      this.$store.commit("toggle_edit_mode");
     },
-    open_edit_modal () {
-      this.edit_modal_open = true
+    open_edit_modal() {
+      this.edit_modal_open = true;
     },
-    close_edit_modal () {
-      this.edit_modal_open = false
+    close_edit_modal() {
+      this.edit_modal_open = false;
     },
 
     // Connection with back end
-    edit_device_in_back_end () {
-      this.$socket.client.emit('update_device', this.device)
-      this.close_edit_modal()
-
-      // Mark device as loading
-      this.$set(this.device, 'loading', true)
-    },
-    delete_device_in_back_end () {
-      if (confirm('Really?')) {
-        this.$socket.client.emit('delete_device', this.device)
-        this.close_edit_modal()
-
-        // Mark device as loading
-        this.$set(this.device, 'loading', true)
+    async edit_device_in_back_end() {
+      try {
+        const { _id, ...properties } = this.device;
+        const url = `/devices/${_id}`;
+        await this.axios.patch(url, properties);
+        this.close_edit_modal();
+      } catch (error) {
+        console.error(error);
+        alert("Failed to update device");
       }
-    }
-  }
-}
+    },
+
+    async delete_device_in_back_end() {
+      if (!confirm("Really?")) return;
+      try {
+        const { _id } = this.device;
+        const url = `/devices/${_id}`;
+        await this.axios.delete(url);
+        this.close_edit_modal();
+      } catch (error) {
+        console.error(error);
+        alert("Failed to delete device");
+      }
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

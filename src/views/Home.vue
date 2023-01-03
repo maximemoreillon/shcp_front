@@ -108,42 +108,42 @@
 // @ is an alias to /src
 
 // Import devices types
-import Light from '@/components/devices/Light.vue'
-import Lock from '@/components/devices/Lock.vue'
-import ac from '@/components/devices/AC.vue'
-import Heater from '@/components/devices/Heater.vue'
-import Sensor from '@/components/devices/Sensor.vue'
-import Camera from '@/components/devices/Camera.vue'
-import Fan from '@/components/devices/Fan.vue'
+import Light from "@/components/devices/Light.vue";
+import Lock from "@/components/devices/Lock.vue";
+import ac from "@/components/devices/AC.vue";
+import Heater from "@/components/devices/Heater.vue";
+import Sensor from "@/components/devices/Sensor.vue";
+import Camera from "@/components/devices/Camera.vue";
+import Fan from "@/components/devices/Fan.vue";
 
-import NewDeviceIcon from '@/components/NewDeviceIcon.vue'
-import DisconnectionWarning from '@/components/DisconnectionWarning.vue'
-import Modal from '@/components/Modal.vue'
+import NewDeviceIcon from "@/components/NewDeviceIcon.vue";
+import DisconnectionWarning from "@/components/DisconnectionWarning.vue";
+import Modal from "@/components/Modal.vue";
 
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
-import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue'
+import PencilIcon from "vue-material-design-icons/Pencil.vue";
+import PencilOffIcon from "vue-material-design-icons/PencilOff.vue";
 
 // Icons of the devices, NOT IDEAL
-import LightbulbIcon from 'vue-material-design-icons/Lightbulb.vue'
-import RadiatorIcon from 'vue-material-design-icons/Radiator.vue'
-import FanIcon from 'vue-material-design-icons/Fan.vue'
-import AirConditionerIcon from 'vue-material-design-icons/AirConditioner.vue'
-import GaugeIcon from 'vue-material-design-icons/Gauge.vue'
-import CctvIcon from 'vue-material-design-icons/Cctv.vue'
-import ImageEditIcon from 'vue-material-design-icons/ImageEdit.vue'
-import LockIcon from 'vue-material-design-icons/Lock.vue'
+import LightbulbIcon from "vue-material-design-icons/Lightbulb.vue";
+import RadiatorIcon from "vue-material-design-icons/Radiator.vue";
+import FanIcon from "vue-material-design-icons/Fan.vue";
+import AirConditionerIcon from "vue-material-design-icons/AirConditioner.vue";
+import GaugeIcon from "vue-material-design-icons/Gauge.vue";
+import CctvIcon from "vue-material-design-icons/Cctv.vue";
+import ImageEditIcon from "vue-material-design-icons/ImageEdit.vue";
+import LockIcon from "vue-material-design-icons/Lock.vue";
 
 export default {
-  name: 'home',
-  data () {
+  name: "home",
+  data() {
     return {
       floorplan_upload_modal_open: false,
 
       floorplan_size: {
         width: undefined,
-        height: undefined
-      }
-    }
+        height: undefined,
+      },
+    };
   },
   components: {
     // Devices
@@ -171,111 +171,131 @@ export default {
     GaugeIcon,
     CctvIcon,
     ImageEditIcon,
-    LockIcon
+    LockIcon,
   },
-  mounted () {
-    const img = new Image()
-    img.src = this.floorplan_src
+  mounted() {
+    const img = new Image();
+    img.src = this.floorplan_src;
     img.onload = () => {
-      this.compute_floorplan_size()
-    }
+      this.compute_floorplan_size();
+    };
     window.onresize = () => {
-      this.compute_floorplan_size()
-    }
+      this.compute_floorplan_size();
+    };
   },
   methods: {
-    compute_floorplan_size () {
+    compute_floorplan_size() {
       // DIRTY
 
-      let original_floorplan_width = this.$refs.floorplan.naturalWidth
-      let original_floorplan_height = this.$refs.floorplan.naturalHeight
+      let original_floorplan_width = this.$refs.floorplan.naturalWidth;
+      let original_floorplan_height = this.$refs.floorplan.naturalHeight;
 
-      let available_vertical_space = window.innerHeight - 250
-      let available_horizontal_space = window.innerWidth - 2 * 65
+      let available_vertical_space = window.innerHeight - 250;
+      let available_horizontal_space = window.innerWidth - 2 * 65;
 
       let horizontal_scaling =
-        available_horizontal_space / original_floorplan_width
+        available_horizontal_space / original_floorplan_width;
       let vertical_scaling =
-        available_vertical_space / original_floorplan_height
+        available_vertical_space / original_floorplan_height;
 
       if (vertical_scaling < horizontal_scaling) {
         this.floorplan_size.height =
-          original_floorplan_height * vertical_scaling + 'px'
-        this.floorplan_size.width = undefined
+          original_floorplan_height * vertical_scaling + "px";
+        this.floorplan_size.width = undefined;
       } else {
-        this.floorplan_size.height = undefined
+        this.floorplan_size.height = undefined;
         this.floorplan_size.width =
-          original_floorplan_width * horizontal_scaling + 'px'
+          original_floorplan_width * horizontal_scaling + "px";
       }
     },
 
-    floorplan_clicked (event) {
+    floorplan_clicked(event) {
       if (this.$store.state.edit_mode) {
-        this.$store.commit('set_edit_mode', false)
+        this.$store.commit("set_edit_mode", false);
       }
     },
 
-    dragenter () {
+    async createDevice(device) {
+      try {
+        await this.axios.post("/devices", device);
+      } catch (error) {
+        console.error(error);
+        alert("Failed to create device");
+      }
+    },
+
+    async updateDevice(device) {
+      try {
+        const { _id, ...properties } = device;
+        const url = `/devices/${_id}`;
+        await this.axios.patch(url, properties);
+      } catch (error) {
+        console.error(error);
+        alert("Failed to update device");
+      }
+    },
+
+    dragenter() {
       // this.new_devices_menu_open = false;
     },
 
-    drop (transfer_data, event) {
-      if (event.target.id === 'floorplan') {
+    async drop(transfer_data, event) {
+      if (event.target.id === "floorplan") {
         // Device has been dropped on the floorplan
 
         let position = {
           x: (100 * event.offsetX) / event.target.width,
-          y: (100 * event.offsetY) / event.target.height
-        }
+          y: (100 * event.offsetY) / event.target.height,
+        };
 
-        if (transfer_data.action === 'create') {
+        if (transfer_data.action === "create") {
           const device_properties = {
             position: position,
-            type: transfer_data.data.component
-          }
+            type: transfer_data.data.component,
+          };
           // Create a new device
-          this.$socket.client.emit('create_device', device_properties)
-        } else if (transfer_data.action === 'update') {
+          await this.createDevice(device_properties);
+        } else if (transfer_data.action === "update") {
           // Update an existing device (i.e. move it)
 
           if (this.$store.state.edit_mode) {
-            let device = transfer_data.data
-            device.position = position
-            this.$socket.client.emit('update_device', device)
+            let device = transfer_data.data;
+            device.position = position;
+            await this.updateDevice(device);
 
             // Mark device as loading
-            this.$set(device, 'loading', true)
+            this.$set(device, "loading", true);
           }
         }
       } else if (event.target.id === transfer_data.data._id) {
         // Device dropped on itself
         // this isequivalent to a long press on mobile
-        this.$store.commit('set_edit_mode', true)
+        this.$store.commit("set_edit_mode", true);
       }
     },
-    floorplan_upload () {
+    floorplan_upload() {
       // Get image from input
-      this.image = this.$refs.floorplan_upload.files[0]
-      if (!this.image) return
+      this.image = this.$refs.floorplan_upload.files[0];
+      if (!this.image) return;
 
-      let formData = new FormData()
-      formData.append('image', this.image)
+      let formData = new FormData();
+      formData.append("image", this.image);
       this.axios
         .post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData)
         .then(() => this.$router.go())
         .catch((error) => {
-          alert(`Something went wrong while uploading the floorplan`)
-          console.error(error)
-        })
-    }
+          alert(`Something went wrong while uploading the floorplan`);
+          console.error(error);
+        });
+    },
   },
   computed: {
-    floorplan_src () {
-      const jwt = this.$cookie.get('jwt')
-      return `${process.env.VUE_APP_SHCP_API_URL}/floorplan?token=${jwt}`
-    }
-  }
-}
+    floorplan_src() {
+      const jwt = this.$cookie.get("jwt");
+      return `${process.env.VUE_APP_SHCP_API_URL}/floorplan?token=${jwt}`;
+    },
+  },
+};
 </script>
 
 <style scoped>

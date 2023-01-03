@@ -1,95 +1,90 @@
 <template>
-  <AppTemplate
-    :options="options"
-    @user="user_changed($event)">
-
+  <AppTemplate :options="options" @user="user_changed($event)">
     <template v-slot:header>
       <router-link :to="{ name: 'about' }">
         <InformationOutlineIcon />
       </router-link>
     </template>
-
   </AppTemplate>
 </template>
 
 <script>
-
-import AppTemplate from '@moreillon/vue_application_template'
-import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
+import AppTemplate from "@moreillon/vue_application_template";
+import InformationOutlineIcon from "vue-material-design-icons/InformationOutline.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     AppTemplate,
-    InformationOutlineIcon
+    InformationOutlineIcon,
   },
-  data () {
+  data() {
     return {
       options: {
         authenticate: true,
-        title: 'SHCP',
-        skip_greetings: process.env.NODE_ENV === 'development',
+        title: "SHCP",
+        skip_greetings: process.env.NODE_ENV === "development",
         login_url: process.env.VUE_APP_LOGIN_URL,
-        identification_url: process.env.VUE_APP_IDENTIFICATION_URL
-
-      }
-    }
+        identification_url: process.env.VUE_APP_IDENTIFICATION_URL,
+      },
+    };
   },
   methods: {
-    user_changed (user) {
-      this.$store.commit('set_user', user)
-      this.ws_auth()
+    user_changed(user) {
+      this.$store.commit("set_user", user);
+      this.ws_auth();
     },
-    ws_auth () {
+    ws_auth() {
       // Check if possible to authentify using a JWT
-      const jwt = this.$cookie.get('jwt')
-      if (!jwt) return
+      const jwt = this.$cookie.get("jwt");
+      if (!jwt) return;
 
-      this.$socket.client.emit('authentication', { jwt })
+      this.$socket.client.emit("authentication", { jwt });
 
       // Acknowledge current authentication attempt
-      this.$store.commit('set_authenticating', true)
-    }
+      this.$store.commit("set_authenticating", true);
+    },
+    async get_devices() {
+      this.$store.commit("set_devices_loading", true);
+      try {
+        const { data: devices } = await this.axios.get("/devices");
+        this.$store.commit("delete_all_devices", devices); // Deleting all probably not necessary
+        this.$store.commit("add_or_update_some_devices", devices);
+      } catch (error) {
+        console.error(error);
+        alert("Failed to query devices");
+      } finally {
+        this.$store.commit("set_devices_loading", false);
+      }
+    },
   },
   sockets: {
-    connect () {
+    connect() {
       // Acknowledge connection
-      this.$store.commit('set_connected', true)
-      this.ws_auth()
+      this.$store.commit("set_connected", true);
+      this.ws_auth();
     },
-    unauthorized (data) {
-      this.$store.commit('set_authenticating', false)
+    unauthorized(data) {
+      this.$store.commit("set_authenticating", false);
     },
-    authenticated (data) {
+    authenticated(data) {
       // mark as no longer trying to authenticate
-      this.$store.commit('set_authenticating', false)
-
-      // Delete all devices because might be outdated
-      this.$store.commit('delete_all_devices', {})
+      this.$store.commit("set_authenticating", false);
 
       // Get devices
-      this.$socket.client.emit('get_all_devices', {})
-
-      this.$store.commit('set_devices_loading', true)
+      this.get_devices();
     },
-    disconnect () {
-      this.$store.commit('set_connected', false)
+    disconnect() {
+      this.$store.commit("set_connected", false);
     },
-    some_devices_added_or_updated (device_array) {
-      this.$store.commit('add_or_update_some_devices', device_array)
+    some_devices_added_or_updated(device_array) {
+      this.$store.commit("add_or_update_some_devices", device_array);
     },
-    device_deleted (device) {
-      this.$store.commit('delete_device', device)
+    device_deleted(device) {
+      this.$store.commit("delete_device", device);
     },
-    all_devices (device_array) {
-      this.$store.commit('delete_all_devices', device_array)
-      this.$store.commit('add_or_update_some_devices', device_array)
-      this.$store.commit('set_devices_loading', false)
-    }
-
-  }
-
-}
+  },
+};
 </script>
 <style>
 .material-design-icon__svg {
@@ -107,12 +102,13 @@ header a {
   align-items: center;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 
-.fade-enter, .fade-leave-to{
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
-
 </style>
