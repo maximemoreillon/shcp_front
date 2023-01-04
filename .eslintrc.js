@@ -14,6 +14,7 @@ module.exports = {
     "comma-dangle": "off",
     quotes: "off",
     "space-before-function-paren": "off",
+    "standard/computed-property-even-spacing": "off",
   },
   parserOptions: {
     parser: "babel-eslint",

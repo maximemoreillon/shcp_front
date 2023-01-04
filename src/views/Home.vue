@@ -105,15 +105,12 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 // Import devices types
 import Light from "@/components/devices/Light.vue";
 import Lock from "@/components/devices/Lock.vue";
 import ac from "@/components/devices/AC.vue";
 import Heater from "@/components/devices/Heater.vue";
 import Sensor from "@/components/devices/Sensor.vue";
-import Camera from "@/components/devices/Camera.vue";
 import Fan from "@/components/devices/Fan.vue";
 
 import NewDeviceIcon from "@/components/NewDeviceIcon.vue";
@@ -148,7 +145,6 @@ export default {
   components: {
     // Devices
     Light,
-    Camera,
     Sensor,
     Heater,
     ac,
@@ -273,20 +269,21 @@ export default {
         this.$store.commit("set_edit_mode", true);
       }
     },
-    floorplan_upload() {
+    async floorplan_upload() {
       // Get image from input
       this.image = this.$refs.floorplan_upload.files[0];
       if (!this.image) return;
 
       const formData = new FormData();
       formData.append("image", this.image);
-      this.axios
-        .post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData)
-        .then(() => this.$router.go())
-        .catch((error) => {
-          alert(`Something went wrong while uploading the floorplan`);
-          console.error(error);
-        });
+
+      try {
+        await this.axios.post(`/floorplan`, formData);
+        this.$router.go();
+      } catch (error) {
+        alert(`Something went wrong while uploading the floorplan`);
+        console.error(error);
+      }
     },
   },
   computed: {
