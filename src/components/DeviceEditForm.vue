@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="modal"
-    v-on:click.self="close_modal"
-    v-bind:class="{open: open}"
-  >
+  <div class="modal" v-on:click.self="close_modal" :class="{ open: open }">
     <div class="modal_window_outer">
       <div class="modal_window_inner">
         <slot></slot>
@@ -13,26 +9,25 @@
 </template>
 
 <script>
-
 export default {
-  name: 'Modal',
+  name: "Modal",
   props: {
     open: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
-    close_modal () {
-      this.$emit('close_modal')
-    }
-  }
-}
+    close_modal() {
+      this.$emit("close_modal");
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.modal{
+.modal {
   /* poisitioning and sizing of background*/
   position: fixed;
   top: 0;
@@ -54,23 +49,19 @@ export default {
   visibility: hidden;
   opacity: 0;
 
-  transition:
-    visibility 0.5s,
-    opacity 0.5s;
+  transition: visibility 0.5s, opacity 0.5s;
 
   /* delay when CLOSING */
   transition-delay: 0.25s;
 }
 
-.modal_window_outer{
+.modal_window_outer {
   /* for elements positioned absolutely inside */
   position: relative;
 
   opacity: 0;
   transform: scaleX(0);
-  transition:
-    opacity 0.25s,
-    transform 0.25s;
+  transition: opacity 0.25s, transform 0.25s;
 
   /* delay when CLOSING */
   transition-delay: 0.25s;
@@ -80,7 +71,7 @@ export default {
   margin: 50px;
 }
 
-.modal_window_inner{
+.modal_window_inner {
   opacity: 0;
   transition: opacity 0.25s;
   /* Delay when CLOSING */
@@ -90,7 +81,7 @@ export default {
   padding: 15px;
 }
 
-.modal.open{
+.modal.open {
   visibility: visible;
   opacity: 1;
 
@@ -98,7 +89,7 @@ export default {
   transition-delay: 0s;
 }
 
-.modal.open .modal_window_outer{
+.modal.open .modal_window_outer {
   opacity: 1;
   transform: scaleX(1);
 
@@ -106,14 +97,14 @@ export default {
   transition-delay: 0s;
 }
 
-.modal.open .modal_window_inner{
+.modal.open .modal_window_inner {
   opacity: 1;
   /* Delay when OPENING */
   transition-delay: 0.25s;
 }
 
 /* close button */
-.modal_close_button{
+.modal_close_button {
   position: absolute;
   top: 0;
   right: 0;
@@ -124,8 +115,7 @@ export default {
   color: #00000066;
 }
 
-.modal_close_button:hover{
+.modal_close_button:hover {
   color: #000000;
 }
-
 </style>

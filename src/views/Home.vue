@@ -243,14 +243,14 @@ export default {
       if (event.target.id === "floorplan") {
         // Device has been dropped on the floorplan
 
-        let position = {
+        const position = {
           x: (100 * event.offsetX) / event.target.width,
           y: (100 * event.offsetY) / event.target.height,
         };
 
         if (transfer_data.action === "create") {
           const device_properties = {
-            position: position,
+            position,
             type: transfer_data.data.component,
           };
           // Create a new device
@@ -278,7 +278,7 @@ export default {
       this.image = this.$refs.floorplan_upload.files[0];
       if (!this.image) return;
 
-      let formData = new FormData();
+      const formData = new FormData();
       formData.append("image", this.image);
       this.axios
         .post(`${process.env.VUE_APP_SHCP_API_URL}/floorplan`, formData)

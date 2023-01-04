@@ -1,11 +1,10 @@
 <template>
-
   <!-- wrapping in a div for click events-->
   <drag
     class="device_icon_wrapper"
-    v-bind:transfer-data="transfer_data"
-    v-bind:style="{left: device.position.x + '%',top: device.position.y + '%'}">
-
+    :transfer-data="transfer_data"
+    :style="{ left: device.position.x + '%', top: device.position.y + '%' }"
+  >
     <!-- The icon itself -->
     <!-- Manages drag evvents -->
     <!-- drag applied here otherwise overrides click events -->
@@ -15,89 +14,76 @@
       v-on:click="$emit('icon_clicked')"
       v-on:contextmenu.prevent="$emit('icon_right_clicked')"
       class="device_icon"
-      v-bind:id="device._id"
-      v-bind:class="{on: device_is_on, loading: device.loading}">
-
+      :id="device._id"
+      :class="{ on: device_is_on, loading: device.loading }"
+    >
       <!-- the icon itself, again -->
-      <slot name="icon"/>
-      <help-icon v-if="!this.$slots.icon"/>
+      <slot name="icon" />
+      <help-icon v-if="!this.$slots.icon" />
 
       <!-- Badges for disconnection -->
       <transition name="fade">
-        <div
-           v-if="device_is_disconnected"
-           class="icon_badge warning_badge">
-          <wifi-off-icon/>
+        <div v-if="device_is_disconnected" class="icon_badge warning_badge">
+          <wifi-off-icon />
         </div>
       </transition>
 
       <!-- Badge to indicate edit mode -->
       <transition name="fade">
-        <div
-           v-if="this.$store.state.edit_mode"
-          class="icon_badge edit_badge">
-          <pencil-icon/>
+        <div v-if="this.$store.state.edit_mode" class="icon_badge edit_badge">
+          <pencil-icon />
         </div>
       </transition>
 
       <!-- Badge to indicate loasing -->
       <transition name="fade">
-        <div
-           v-if="device.loading"
-           class="icon_badge loading_badge">
-          <loading-icon/>
+        <div v-if="device.loading" class="icon_badge loading_badge">
+          <loading-icon />
         </div>
       </transition>
-
     </div>
-
   </drag>
 </template>
 
 <script>
-
 // Icons
-import HelpIcon from 'vue-material-design-icons/Help.vue'
-import WifiOffIcon from 'vue-material-design-icons/WifiOff.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
-import LoadingIcon from 'vue-material-design-icons/Loading.vue'
+import HelpIcon from "vue-material-design-icons/Help.vue";
+import WifiOffIcon from "vue-material-design-icons/WifiOff.vue";
+import PencilIcon from "vue-material-design-icons/Pencil.vue";
+import LoadingIcon from "vue-material-design-icons/Loading.vue";
 
-import DeviceState from '@/mixins/DeviceState.js'
+import DeviceState from "@/mixins/DeviceState.js";
 
 export default {
-  name: 'DeviceIcon',
+  name: "DeviceIcon",
   props: {
     device: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   mixins: [DeviceState],
   components: {
     HelpIcon,
     PencilIcon,
     WifiOffIcon,
-    LoadingIcon
+    LoadingIcon,
   },
   methods: {},
   computed: {
-
-    transfer_data () {
+    transfer_data() {
       // Data transfered using drag drop
       return {
-        action: 'update',
-        data: this.device
-      }
-    }
-  }
-}
-
+        action: "update",
+        data: this.device,
+      };
+    },
+  },
+};
 </script>
 
 <style>
-
-.device_icon_wrapper{
-
+.device_icon_wrapper {
   /* ensure above rest */
   z-index: 5;
 
@@ -105,15 +91,13 @@ export default {
   position: absolute;
 
   /* Position by center and not by corner */
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 
   /* Misc visual */
   cursor: pointer;
-
 }
 
 .device_icon {
-
   /* padding to facilitate dropping on itself */
   padding: 2vmin;
 
@@ -126,7 +110,7 @@ export default {
   transition: color 0.5s;
 }
 
-.icon_badge{
+.icon_badge {
   position: absolute;
   top: 10%;
   right: 10%;
@@ -144,7 +128,6 @@ export default {
   align-items: center;
 
   font-size: 2vmin;
-
 }
 
 .warning_badge {
@@ -164,19 +147,20 @@ export default {
 }
 
 .loading_badge {
-
   background-color: #666666;
 
   animation-name: rotation;
   animation-duration: 1s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
-
 }
 
 @keyframes rotation {
-  0% {transform: rotate(0deg);}
-  100% {transform: rotate(360deg);}
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
 </style>

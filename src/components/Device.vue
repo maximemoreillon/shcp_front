@@ -3,8 +3,8 @@
     <!-- binding ID necessary to find the element from drag events -->
 
     <DeviceIcon
-      v-bind:id="device._id"
-      v-bind:device="device"
+      :id="device._id"
+      :device="device"
       @icon_clicked="icon_clicked()"
       @icon_right_clicked="icon_right_clicked()"
     >
@@ -16,7 +16,7 @@
     <!-- form to edit the device -->
     <!-- Currently placed inside a modal -->
     <!-- Could be a dedicated page -->
-    <Modal v-bind:open="edit_modal_open" @close_modal="close_edit_modal()">
+    <Modal :open="edit_modal_open" @close_modal="edit_modal_open = false">
       <table class="device_properties_table">
         <tr v-for="(form_field, index) in form_fields" :key="`field_${index}`">
           <td>{{ form_field.label }}</td>
@@ -76,17 +76,11 @@ export default {
 
   methods: {
     icon_clicked() {
-      if (this.$store.state.edit_mode) this.open_edit_modal();
+      if (this.$store.state.edit_mode) this.edit_modal_open = true;
       else this.$emit("icon_clicked");
     },
     icon_right_clicked() {
       this.$store.commit("toggle_edit_mode");
-    },
-    open_edit_modal() {
-      this.edit_modal_open = true;
-    },
-    close_edit_modal() {
-      this.edit_modal_open = false;
     },
 
     // Connection with back end
@@ -95,7 +89,7 @@ export default {
         const { _id, ...properties } = this.device;
         const url = `/devices/${_id}`;
         await this.axios.patch(url, properties);
-        this.close_edit_modal();
+        this.edit_modal_open = false;
       } catch (error) {
         console.error(error);
         alert("Failed to update device");
@@ -108,7 +102,7 @@ export default {
         const { _id } = this.device;
         const url = `/devices/${_id}`;
         await this.axios.delete(url);
-        this.close_edit_modal();
+        this.edit_modal_open = false;
       } catch (error) {
         console.error(error);
         alert("Failed to delete device");
@@ -130,9 +124,6 @@ export default {
 
 .device_properties_table td {
   padding: 5px;
-}
-
-.device_properties_table tr:not(:last-child) {
 }
 
 .device_properties_table input[type="text"] {
