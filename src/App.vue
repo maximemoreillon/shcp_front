@@ -32,7 +32,7 @@ export default {
   methods: {
     user_changed(user) {
       this.$store.commit("set_user", user);
-      this.ws_auth();
+      if (user) this.ws_auth();
     },
     ws_auth() {
       // Check if possible to authentify using a JWT
@@ -68,10 +68,7 @@ export default {
       this.$store.commit("set_authenticating", false);
     },
     authenticated(data) {
-      // mark as no longer trying to authenticate
       this.$store.commit("set_authenticating", false);
-
-      // Get devices
       this.get_devices();
     },
     disconnect() {
