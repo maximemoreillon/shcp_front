@@ -12,9 +12,11 @@ import VueDragDrop from "vue-drag-drop";
 
 import "./registerServiceWorker";
 
-axios.defaults.baseURL = process.env.VUE_APP_SHCP_API_URL;
+const { VUE_APP_SHCP_API_URL } = process.env;
 
-const socket = io(`${process.env.VUE_APP_SHCP_API_URL}`);
+axios.defaults.baseURL = VUE_APP_SHCP_API_URL;
+
+const socket = io(`${VUE_APP_SHCP_API_URL}`);
 
 Vue.use(VueAxios, axios);
 Vue.use(VueSocketIOExt, socket);

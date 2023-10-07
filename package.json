@@ -16,7 +16,7 @@
     "dotenv": "^8.6.0",
     "mobile-drag-drop": "^2.3.0-rc.2",
     "register-service-worker": "^1.7.1",
-    "socket.io-client": "^2.4.0",
+    "socket.io-client": "^4.7.2",
     "vue": "^2.6.14",
     "vue-axios": "^2.1.5",
     "vue-cookie": "^1.1.4",
