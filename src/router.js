@@ -16,11 +16,6 @@ export default new Router({
       component: Home,
     },
     {
-      path: "/dragdrop",
-      name: "dragdrop",
-      component: () => import("./views/DragDropTest.vue"),
-    },
-    {
       path: "/about",
       name: "about",
       component: () => import("./views/About.vue"),
